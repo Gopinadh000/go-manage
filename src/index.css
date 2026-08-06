@@ -1,0 +1,74 @@
+@import 'tailwindcss';
+
+/*
+  Tailwind v4: @theme registers class names.
+  Values come from CSS vars that applyTheme() sets on <html>.
+*/
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-mobile: 20rem; /* 320px — keep in sync with break-points.types.ts */
+  --breakpoint-tablet: 48rem; /* 768px */
+  --breakpoint-laptop: 64rem; /* 1024px */
+  --breakpoint-desktop: 80rem; /* 1280px */
+
+  /* --color-x  => bg-x 
+     --border-x  => border-x
+     --
+  */
+
+  --color-app-primary-50: var(--app-primary-50);
+  --color-app-primary-100: var(--app-primary-100);
+  --color-app-primary-500: var(--app-primary-500);
+  --color-app-primary-800: var(--app-primary-800);
+  --color-app-primary-900: var(--app-primary-900);
+
+  --color-app-secondary-50: var(--app-secondary-50);
+  --color-app-secondary-100: var(--app-secondary-100);
+  --color-app-secondary-500: var(--app-secondary-500);
+  --color-app-secondary-800: var(--app-secondary-800);
+  --color-app-secondary-900: var(--app-secondary-900);
+
+  --color-app-bg: var(--app-bg);
+  --color-app-surface: var(--app-surface);
+  --color-app-surface-muted: var(--app-surface-muted);
+  --color-app-border: var(--app-border);
+  --color-app-border-strong: var(--app-border-strong);
+
+  --color-app-text: var(--app-text);
+  --color-app-text-secondary: var(--app-text-secondary);
+  --color-app-text-muted: var(--app-text-muted);
+  --color-app-text-inverse: var(--app-text-inverse);
+
+  --color-app-error: var(--app-error);
+  --color-app-error-soft: var(--app-error-soft);
+  --color-app-warning: var(--app-warning);
+  --color-app-warning-soft: var(--app-warning-soft);
+  --color-app-success: var(--app-success);
+  --color-app-success-soft: var(--app-success-soft);
+}
+
+:root {
+  --sidebar-collapsed: 4.5rem;
+  --sidebar-expanded: 15rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--app-bg, #f3f4f6);
+  color: var(--app-text, #111827);
+  font-family: system-ui, sans-serif;
+  max-height: 90dvh;
+  overflow-y: hidden;
+}

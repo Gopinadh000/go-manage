@@ -1,0 +1,51 @@
+export const SIDEBAR_ITEMS = [
+  {
+    key: "dashboard",
+    label: "Dashboard",
+    path: "/",
+    icon: "DashboardOutlined",
+    permission: "dashboard:view",
+  },
+  {
+    key: "users",
+    label: "Users",
+    path: "/users",
+    icon: "PeopleAltOutlined",
+    permission: "users:view",
+  },
+  {
+    key: "projects",
+    label: "Projects",
+    path: "/projects",
+    icon: "FolderOutlined",
+    permission: "projects:view",
+  },
+  {
+    key: "tasks",
+    label: "My Tasks",
+    path: "/tasks",
+    icon: "TaskOutlined",
+    permission: "tasks:view",
+  },
+  {
+    key: "ai",
+    label: "AI Assistant",
+    path: "/ai",
+    icon: "SmartToyOutlined",
+    permission: "ai:view",
+  },
+  {
+    key: "chat",
+    label: "Chat",
+    path: "/chat",
+    icon: "ChatOutlined",
+    permission: "chat:view",
+  },
+  {
+    key: "settings",
+    label: "Settings",
+    path: "/settings",
+    icon: "SettingsOutlined",
+    permission: "settings:view",
+  },
+];
