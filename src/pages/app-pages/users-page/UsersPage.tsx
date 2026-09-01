@@ -1,8 +1,19 @@
+import { useState } from "react"
+import Button from "../../../components/ui/button/Button"
+import APPModal from "../../../components/ui/modal/Modal"
+import PageHeader from "../../../components/ui/page-header/PageHeader"
+import { AddOutlined } from "@mui/icons-material"
+
 const UsersPage = () => {
+  const [open , setOpen] = useState(false)
   return (
-    <div className="rounded-md border border-app-border bg-app-surface p-4">
-      <h1 className="text-xl font-semibold text-app-text">Users</h1>
-      <p className="mt-1 text-sm text-app-text-muted">Manage team members and roles.</p>
+    <div className="h-full border border-app-border rounded-md flex flex-col gap-5">
+      <PageHeader 
+      title="Users" 
+      subtitle="Manage team members and roles." 
+      children={<Button startIcon={<AddOutlined />} label="Create User" size="sm" onClick={() => {setOpen(true)}} />} />
+     <div className="flex flex-col gap-4">asndi</div>
+      <APPModal open={open} onClose={() => setOpen(false)} modalType="side" size="lg" sideInset="true" />
     </div>
   )
 }

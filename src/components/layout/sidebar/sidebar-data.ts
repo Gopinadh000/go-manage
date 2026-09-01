@@ -1,17 +1,24 @@
-export const SIDEBAR_ITEMS = [
+export type SidebarItem = {
+  key: string;
+  label: string;
+  path: string;
+  icon: string;
+  permission: string;
+};
+
+/**
+ * Order here = sidebar order AND default landing priority.
+ * Dashboard is first when the user has `dashboard:view`.
+ * Otherwise the next permitted item (projects, tasks, …) is used.
+ * Dashboard path is /dashboard so "/" can redirect via getDefaultAppPath.
+ */
+export const SIDEBAR_ITEMS: SidebarItem[] = [
   {
     key: "dashboard",
     label: "Dashboard",
-    path: "/",
+    path: "/dashboard",
     icon: "DashboardOutlined",
     permission: "dashboard:view",
-  },
-  {
-    key: "users",
-    label: "Users",
-    path: "/users",
-    icon: "PeopleAltOutlined",
-    permission: "users:view",
   },
   {
     key: "projects",
@@ -26,6 +33,13 @@ export const SIDEBAR_ITEMS = [
     path: "/tasks",
     icon: "TaskOutlined",
     permission: "tasks:view",
+  },
+  {
+    key: "users",
+    label: "Users",
+    path: "/users",
+    icon: "PeopleAltOutlined",
+    permission: "users:view",
   },
   {
     key: "ai",
@@ -49,3 +63,20 @@ export const SIDEBAR_ITEMS = [
     permission: "settings:view",
   },
 ];
+
+/**
+ * First permitted sidebar item (dashboard → projects → tasks → …).
+ */
+export function getDefaultAppPath(permissions: string[]): string {
+  const firstAllowed = SIDEBAR_ITEMS.find((item) =>
+    permissions.includes(item.permission),
+  );
+
+  return firstAllowed?.path ?? "/unauthorized";
+}
+
+export function getRoutePermission(path: string): string | null {
+  const normalized = path === "/" ? "/" : path.replace(/\/$/, "") || "/";
+  const item = SIDEBAR_ITEMS.find((entry) => entry.path === normalized);
+  return item?.permission ?? null;
+}

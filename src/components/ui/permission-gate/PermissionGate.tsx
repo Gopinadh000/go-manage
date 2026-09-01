@@ -1,11 +1,24 @@
-import React from 'react'
+import type { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
+import { usePermission } from "../../../hooks/usePermission";
 
-const PermissionGate = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div>{
-        children
-    }</div>
-  )
-}
+type PermissionGateProps = {
+  permission: string;
+  children: ReactNode;
+};
 
-export default PermissionGate
+/**
+ * Route-level gate: if the user lacks `permission`, send them to their
+ * first allowed page (projects/tasks preferred) instead of rendering.
+ */
+const PermissionGate = ({ permission, children }: PermissionGateProps) => {
+  const { can, getDefaultPath } = usePermission();
+
+  if (!can(permission)) {
+    return <Navigate to={getDefaultPath()} replace />;
+  }
+
+  return <>{children}</>;
+};
+
+export default PermissionGate;

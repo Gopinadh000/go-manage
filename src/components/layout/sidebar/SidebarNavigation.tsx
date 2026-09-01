@@ -43,6 +43,7 @@ const SidebarNavigation = () => {
           <div key={item.key} className="hover:bg-app-primary-100 w-full rounded-sm outline-none">
             <NavLink
               to={item.path}
+              end={item.path === "/"}
               onClick={closeSideBar}
               className={({ isActive }) =>
                 `relative flex items-center gap-3 px-2 py-2 text-sm font-medium transition-colors ${

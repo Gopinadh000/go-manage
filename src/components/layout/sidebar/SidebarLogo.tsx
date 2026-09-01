@@ -1,13 +1,23 @@
+import { Link } from 'react-router-dom'
 import { useSidebar } from '../../../services/context/sidebar-context/SidebarContext'
+import { usePermission } from '../../../hooks/usePermission'
 
 // import gologo from "../../../assets/images/go-l.png";
 
 const SidebarLogo = () => {
-  const { showExpandedContent } = useSidebar()
+  const { showExpandedContent, closeSideBar } = useSidebar()
+  const { getDefaultPath } = usePermission()
+
+  // Same home as "/" redirect: first permitted sidebar route
+  // (dashboard → projects → tasks → …)
+  const homePath = getDefaultPath()
 
   return (
-    <div
-      className={`flex h-18 items-center px-2 ${
+    <Link
+      to={homePath}
+      onClick={closeSideBar}
+      aria-label="Go Manage home"
+      className={`flex h-18 items-center px-2 outline-none ${
         showExpandedContent ? 'justify-start gap-4' : 'justify-center'
       }`}
     >
@@ -65,8 +75,8 @@ const SidebarLogo = () => {
       Go Manage
     </h1>
       )}
-    </div>
+    </Link>
   );
 };
 
-export default SidebarLogo; 
+export default SidebarLogo;

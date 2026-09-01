@@ -1,74 +1,75 @@
-import { useRef, useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import Button from '../../../components/ui/button/Button'
-import InputField from '../../../components/ui/inputs/input-field/InputField'
-import { useApi } from '../../../services/api'
-import { useAuth } from '../../../services/context/auth-context/AuthContext'
+import { useRef, useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../../../components/ui/button/Button";
+import InputField from "../../../components/ui/inputs/input-field/InputField";
+import { useApi } from "../../../services/api";
+import {
+  useAuth,
+  type SessionUserData,
+} from "../../../services/context/auth-context/AuthContext";
+import { getDefaultAppPath } from "../../../components/layout/sidebar/sidebar-data";
 
-type LoginResponse = {
-  accessToken: string
-  user: {
-    userid: string
-    name: string
-    tenant_id: string
-  }
-  permissions?: string[]
-}
+type LoginApiResponse = {
+  status: boolean;
+  statusMessage?: string;
+  data?: SessionUserData;
+};
 
 type FieldErrors = {
-  email?: string
-  password?: string
-}
+  email?: string;
+  password?: string;
+};
 
-/** Form logic only — uncontrolled inputs via useRef + useApi */
 const LoginForm = () => {
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
-  const { POST, loading, error } = useApi<LoginResponse>()
-  const { login } = useAuth()
-  const navigate = useNavigate()
+  const { POST, loading, error } = useApi<LoginApiResponse>();
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const validate = (email: string, password: string): FieldErrors => {
-    const next: FieldErrors = {}
+    const next: FieldErrors = {};
 
     if (!email) {
-      next.email = 'Email is required'
+      next.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      next.email = 'Enter a valid email'
+      next.email = "Enter a valid email";
     }
 
     if (!password) {
-      next.password = 'Password is required'
+      next.password = "Password is required";
     } else if (password.length < 6) {
-      next.password = 'Password must be at least 6 characters'
+      next.password = "Password must be at least 6 characters";
     }
 
-    return next
-  }
+    return next;
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const email = emailRef.current?.value.trim() ?? ''
-    const password = passwordRef.current?.value ?? ''
-    const nextErrors = validate(email, password)
+    const email = emailRef.current?.value.trim() ?? "";
+    const password = passwordRef.current?.value ?? "";
+    const nextErrors = validate(email, password);
 
-    setFieldErrors(nextErrors)
-    if (Object.keys(nextErrors).length > 0) return
+    setFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
 
-    const resData = await POST('/auth/login', { email, password })
-    // if (!result?.accessToken) return
+    const resData = await POST("/auth/login", { email, password });
 
-    if (!resData?.status){
-        console.log(resData?.statusMessage)
+    if (!resData?.status || !resData.data) {
+      return;
     }
 
-    const resUserData = resData.data.userData;
-    login(resUserData)
-    navigate('/', { replace: true })
-  }
+    login(resData.data);
+
+    // Land on first permitted route (projects → tasks preferred), not "/"
+    navigate(getDefaultAppPath(resData.data.userpermissions ?? []), {
+      replace: true,
+    });
+  };
 
   return (
     <form
@@ -119,7 +120,7 @@ const LoginForm = () => {
 
       <Button
         type="submit"
-        label={loading ? 'Signing in…' : 'Sign in'}
+        label={loading ? "Signing in…" : "Sign in"}
         variant="contained"
         size="md"
         fullWidth
@@ -127,7 +128,7 @@ const LoginForm = () => {
       />
 
       <p className="text-center text-sm text-app-text-muted">
-        Don&apos;t have an account?{' '}
+        Don&apos;t have an account?{" "}
         <Link
           to="/register"
           className="font-medium text-app-primary-500 hover:text-app-primary-800"
@@ -136,7 +137,7 @@ const LoginForm = () => {
         </Link>
       </p>
     </form>
-  )
-}
+  );
+};
 
-export default LoginForm
+export default LoginForm;

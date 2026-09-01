@@ -1,20 +1,23 @@
 import { useAuth } from "../../services/context/auth-context/AuthContext";
-import { Navigate, Outlet } from 'react-router-dom'
-
+import { Navigate, Outlet } from "react-router-dom";
+import { getDefaultAppPath } from "../../components/layout/sidebar/sidebar-data";
 
 const PublicRoutes = () => {
+  const { isAuthenticated, isLoading, permissions } = useAuth();
 
-    const {isAuthenticated , isLoading} = useAuth()
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center text-app text-app-text-muted">
+        ...Loading
+      </div>
+    );
+  }
 
-    if(isLoading){
-        return <div className="flex h-screen items-center justify-center text-app text-app-text-muted">...Loading</div>
-    }
+  if (isAuthenticated) {
+    return <Navigate to={getDefaultAppPath(permissions)} replace />;
+  }
 
-    if(isAuthenticated){
-        return <Navigate to="/" replace/>
-    }
-
-  return  <Outlet/>
+  return <Outlet />;
 };
 
 export default PublicRoutes;

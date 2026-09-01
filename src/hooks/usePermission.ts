@@ -1,5 +1,5 @@
 import { useAuth } from "../services/context/auth-context/AuthContext";
-
+import { getDefaultAppPath } from "../components/layout/sidebar/sidebar-data";
 
 export const usePermission = () => {
   const { permissions } = useAuth();
@@ -8,7 +8,11 @@ export const usePermission = () => {
     return permissions.includes(permission);
   };
 
+  const getDefaultPath = () => getDefaultAppPath(permissions);
+
   return {
-    can
+    can,
+    permissions,
+    getDefaultPath,
   };
 };
