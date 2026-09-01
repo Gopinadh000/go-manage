@@ -1,16 +1,14 @@
 import { useCallback, useRef, useState } from 'react'
 import axios, { type AxiosRequestConfig } from 'axios'
-import { apiClient } from './axios.instance'
+import { api } from './axios.instance'
 import type { ApiError, ApiStatus, HttpMethod } from './types'
 
 type RequestOptions = Omit<AxiosRequestConfig, 'method' | 'url' | 'data'>
 
 function toApiError(error: unknown): ApiError {
+  console.log(error , "error")
   if (axios.isAxiosError(error)) {
-    const message =
-      (error.response?.data as { message?: string } | undefined)?.message ??
-      error.message ??
-      'Something went wrong'
+    const message = error.response?.data.statusMessage ?? 'Something went wrong'
 
     return {
       message,
@@ -35,6 +33,8 @@ function toApiError(error: unknown): ApiError {
  * await get('/users')
  * await post('/users', { name: 'Ada' })
  */
+
+
 export function useApi<TData = unknown>() {
   const [data, setData] = useState<TData | null>(null)
   const [error, setError] = useState<ApiError | null>(null)
@@ -47,11 +47,13 @@ export function useApi<TData = unknown>() {
   const reset = useCallback(() => {
     abortRef.current?.abort()
     abortRef.current = null
+
     setData(null)
     setError(null)
     setStatus('idle')
     setStatusCode(null)
     setLoading(false)
+
   }, [])
 
   const request = useCallback(
@@ -71,7 +73,7 @@ export function useApi<TData = unknown>() {
       setError(null)
 
       try {
-        const response = await apiClient.request<TData>({
+        const response = await api.request<TData>({
           ...options,
           method,
           url,
@@ -104,31 +106,31 @@ export function useApi<TData = unknown>() {
     [],
   )
 
-  const get = useCallback(
+  const GET = useCallback(
     (url: string, options?: RequestOptions) =>
       request('GET', url, undefined, options),
     [request],
   )
 
-  const post = useCallback(
+  const POST = useCallback(
     (url: string, body?: unknown, options?: RequestOptions) =>
       request('POST', url, body, options),
     [request],
   )
 
-  const put = useCallback(
+  const PUT = useCallback(
     (url: string, body?: unknown, options?: RequestOptions) =>
       request('PUT', url, body, options),
     [request],
   )
 
-  const patch = useCallback(
+  const PATCH = useCallback(
     (url: string, body?: unknown, options?: RequestOptions) =>
       request('PATCH', url, body, options),
     [request],
   )
 
-  const del = useCallback(
+  const DELETE = useCallback(
     (url: string, options?: RequestOptions) =>
       request('DELETE', url, undefined, options),
     [request],
@@ -141,11 +143,7 @@ export function useApi<TData = unknown>() {
     status,
     statusCode,
     request,
-    get,
-    post,
-    put,
-    patch,
-    del,
     reset,
+    GET, PATCH, PUT, DELETE, POST,
   }
 }

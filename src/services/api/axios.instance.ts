@@ -1,33 +1,38 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
-import { emitLogout, getAuthToken } from './authToken'
+import { emitLogout } from './authToken'
 
 const baseURL = import.meta.env.VITE_API_BASE_URL ?? ''
 
 export const apiClient = axios.create({
   baseURL,
   timeout: 30_000,
+  // Required for cross-origin cookie auth (FE :4001 → API :4002)
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
 })
 
-// Before every request → attach saved token if present
+// Alias used by useApi / older imports
+export const api = apiClient
+
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = getAuthToken()
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-
+  // Cookie is sent automatically via withCredentials — no Bearer header needed
   return config
 })
 
-// If backend says unauthorized → clear token + notify AuthContext
 apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    if (error.response?.status === 401) {
+    const url = error.config?.url ?? ''
+    const isAuthBootstrap =
+      url.includes('/auth/me') ||
+      url.includes('/auth/login') ||
+      url.includes('/auth/register')
+
+    // Don't force-logout on expected unauthenticated bootstrap/login failures
+    if (error.response?.status === 401 && !isAuthBootstrap) {
       emitLogout()
     }
 

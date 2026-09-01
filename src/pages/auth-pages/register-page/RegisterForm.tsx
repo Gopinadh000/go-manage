@@ -38,8 +38,8 @@ const RegisterForm = () => {
   const [values, setValues] = useState<RegisterFormValues>(INITIAL_VALUES)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
 
-  const { post, loading, error } = useApi<RegisterResponse>()
-  const { login } = useAuth()
+  const { POST, loading, error } = useApi<RegisterResponse>()
+  // const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -83,20 +83,21 @@ const RegisterForm = () => {
     if (Object.keys(nextErrors).length > 0) return
 
     // Role is fixed — user cannot choose rights / tenant_id
-    const result = await post('/auth/register', {
+    const payloadData = {
       firstname: values.firstname.trim(),
       lastname: values.lastname.trim(),
       email: values.email.trim(),
       tenant_name: values.tenant_name.trim(),
       password: values.password,
-      role: 'SUPER_ADMIN',
-    })
+    }
 
-    if (!result?.accessToken) return
+    const resData = await POST('/auth/register', payloadData)
+    if(resData?.status){
+     navigate('/login', { replace: true })
+    }   
+  };
 
-    login(result)
-    navigate('/', { replace: true })
-  }
+
 
   return (
     <form

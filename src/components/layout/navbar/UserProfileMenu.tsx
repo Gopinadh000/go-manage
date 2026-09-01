@@ -32,7 +32,9 @@ const UserProfileMenu = () => {
   const { mode, palette, setMode, setPallete } = useTheme()
   const navigate = useNavigate()
 
-  const displayName = user?.name?.trim() || 'User'
+  const displayName =
+    [user?.firstName, user?.lastName].filter(Boolean).join(' ').trim() ||
+    'User'
   const initials = getInitials(displayName)
 
   useEffect(() => {
@@ -57,9 +59,9 @@ const UserProfileMenu = () => {
     }
   }, [open])
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setOpen(false)
-    logout()
+    await logout()
     navigate('/login', { replace: true })
   }
 
@@ -106,8 +108,8 @@ const UserProfileMenu = () => {
                 {displayName}
               </p>
               <p className="truncate text-xs text-app-text-muted">
-                {user?.tenant_id
-                  ? `Workspace · ${user.tenant_id}`
+                {user?.tenantName
+                  ? `Workspace · ${user.tenantName}`
                   : 'Signed in'}
               </p>
             </div>

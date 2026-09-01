@@ -26,7 +26,7 @@ const LoginForm = () => {
   const passwordRef = useRef<HTMLInputElement>(null)
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
 
-  const { post, loading, error } = useApi<LoginResponse>()
+  const { POST, loading, error } = useApi<LoginResponse>()
   const { login } = useAuth()
   const navigate = useNavigate()
 
@@ -58,10 +58,15 @@ const LoginForm = () => {
     setFieldErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return
 
-    const result = await post('/auth/login', { email, password })
-    if (!result?.accessToken) return
+    const resData = await POST('/auth/login', { email, password })
+    // if (!result?.accessToken) return
 
-    login(result)
+    if (!resData?.status){
+        console.log(resData?.statusMessage)
+    }
+
+    const resUserData = resData.data.userData;
+    login(resUserData)
     navigate('/', { replace: true })
   }
 

@@ -30,7 +30,6 @@ const SidebarNavigation = () => {
 
 
   const sidebarItems = SIDEBAR_ITEMS.filter((item) =>{
-
     return  can(item.permission)
   }
    

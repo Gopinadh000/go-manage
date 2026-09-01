@@ -11,11 +11,6 @@
   --breakpoint-laptop: 64rem; /* 1024px */
   --breakpoint-desktop: 80rem; /* 1280px */
 
-  /* --color-x  => bg-x 
-     --border-x  => border-x
-     --
-  */
-
   --color-app-primary-50: var(--app-primary-50);
   --color-app-primary-100: var(--app-primary-100);
   --color-app-primary-500: var(--app-primary-500);
