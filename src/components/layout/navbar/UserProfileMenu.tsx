@@ -107,10 +107,13 @@ const UserProfileMenu = () => {
               <p className="truncate text-sm font-semibold text-app-text">
                 {displayName}
               </p>
+              <p>
+                {user?.rolename}
+              </p>
               <p className="truncate text-xs text-app-text-muted">
-                {user?.tenantName
-                  ? `Workspace · ${user.tenantName}`
-                  : 'Signed in'}
+               
+                    {user.tenantName}`
+                
               </p>
             </div>
           </div>
@@ -180,13 +183,13 @@ const UserProfileMenu = () => {
                       aria-pressed={selected}
                       onClick={() => setPallete(option)}
                       className={`
-                        relative flex h-8 w-8 items-center justify-center rounded-full
+                        relative flex h-6 w-6 items-center justify-center
                         transition-transform hover:scale-105
                         ${selected ? 'ring-2 ring-app-primary-500 ring-offset-2 ring-offset-app-surface' : ''}
                       `}
                     >
                       <span
-                        className="h-full w-full rounded-full"
+                        className="h-full w-full "
                         style={{ backgroundColor: brandPalettes[option][500] }}
                       />
                       {selected ? (
