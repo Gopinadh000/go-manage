@@ -1,9 +1,9 @@
 import { useState } from "react"
 import Button from "../../../components/ui/button/Button"
-import APPModal from "../../../components/ui/modal/Modal"
 import PageHeader from "../../../components/ui/page-header/PageHeader"
 import { AddOutlined } from "@mui/icons-material"
 import UsersDataTable from "./components/users-datatable/UsersDataTable"
+import CreateUser from "./components/create-user/CreateUser"
 
 
 const UsersPage = () => {
@@ -19,7 +19,7 @@ const UsersPage = () => {
      <div className="flex-1 min-h-0">
        <UsersDataTable />
      </div>
-      <APPModal open={open} onClose={() => setOpen(false)} modalType="side" size="lg" sideInset="true" />
+      <CreateUser  open={open} onClose={()=> setOpen(false)}/>
     </div>
   )
 }

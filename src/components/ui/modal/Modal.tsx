@@ -65,7 +65,7 @@ const modalStyle = (
     transform
     -translate-x-1/2
     -translate-y-1/2
-    rounded-xl
+    rounded-md
     ${sizeClass}
   `;
 };
@@ -89,7 +89,7 @@ const APPModal: React.FC<ModalProps> = ({
   size = "md",
   children,
   title,
-  footerComponent,
+  footerComponent = <></>,
   sideInset = false,
   sx,
 }) => {
@@ -111,7 +111,7 @@ const APPModal: React.FC<ModalProps> = ({
       >
         <Box className={modalStyle(modalType, size, open, sideInset)} sx={sx}>
           {/* Header */}
-          <Box className="flex h-12 shrink-0 items-center justify-between border-b border-app-border bg-app-bg px-4">
+          <Box className="flex h-14 shrink-0 items-center justify-between border-b-[0.5px]  border-app-border px-4">
             <Typography
               id="transition-modal-title"
               variant="inherit"
@@ -122,7 +122,7 @@ const APPModal: React.FC<ModalProps> = ({
             <button
               type="button"
               aria-label="Close"
-              className="flex h-8 w-8 items-center justify-center rounded-sm text-app-text-muted transition-colors hover:bg-app-surface hover:text-app-error"
+              className="flex h-6 w-6 items-center justify-center cursor-pointer hover:border hover:border-app-border rounded-sm text-app-text-muted transition-colors hover:bg-app-surface hover:text-app-error"
               onClick={onClose}
             >
               <CloseIcon fontSize="small" />
@@ -135,11 +135,9 @@ const APPModal: React.FC<ModalProps> = ({
           </Box>
 
           {/* Footer */}
-          {footerComponent ? (
-            <Box className="flex h-14 shrink-0 items-center border-t border-app-border bg-app-bg px-4 py-2">
+            <Box className="flex h-14 shrink-0 items-center px-4 py-2 border-t-[0.5px] border-app-border inset-shadow-sm">
               {footerComponent}
             </Box>
-          ) : null}
         </Box>
       </Modal>
     </Box>
