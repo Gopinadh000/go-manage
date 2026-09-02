@@ -1,0 +1,335 @@
+{
+  "status": true,
+  "statusCode": 200,
+  "data": {
+    "headers": [
+      {
+        "fieldName" : "select",
+        "key": "select",
+       "label": ""
+    },
+     {
+        "fieldName" : "firstName",
+        "key": "firstName",
+        "label": "First Name"
+      },
+      {
+        "fieldName" : "lastName",
+        "key": "lastName",
+        "label": "Last Name"
+      },
+      {
+         "fieldName": "email",
+        "key": "email",
+        "label": "Email"
+      },
+      {
+         "fieldName": "role",
+        "key": "role",
+        "label": "Role"
+      },
+      {
+         "fieldName": "status",
+        "key": "status",
+        "label": "Status"
+      }
+      , {
+         "fieldName": "action",
+        "key": "action",
+        "label": "Action"
+      },
+      {
+         "fieldName": "action",
+        "key": "new1",
+        "label": "New1"
+      },
+       {
+        "fieldName": "action",
+        "key": "new1",
+        "label": "New1"
+      },
+       {
+        "fieldName": "action",       
+        "key": "new1",
+        "label": "New1"
+      },
+       {
+        "fieldName": "action",
+        "key": "new1",
+        "label": "New1"
+      }, {
+        "fieldName": "action",
+        "key": "new1",
+        "label": "New1"
+      }
+    ],
+    "items": [
+      {
+        "firstName": "Gopinadh",
+        "lastName": "Vallabhaneni",
+        "email": "gopinadh@example.com",
+        "role": "SUPER_ADMIN",
+        "status": "active"
+      },
+      {
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },
+       {
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      } ,{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      },{
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john@example.com",
+        "role": "USER",
+        "status": "active"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 10,
+      "totalCount": 25
+    }
+  }
+}
