@@ -16,9 +16,9 @@ const UsersPage = () => {
       title="Users" 
       subtitle="Manage team members and roles." 
       children={<Button startIcon={<AddOutlined />} label="Create User" size="sm" onClick={() => {setOpen(true)}} />} />
-     <div className="flex-1 min-h-0">
+     <div className="flex-1 min-h-0 ">
        <UsersDataTable />
-     </div>
+     </div> 
       <CreateUser  open={open} onClose={()=> setOpen(false)}/>
     </div>
   )

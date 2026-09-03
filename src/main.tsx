@@ -5,7 +5,9 @@ import App from './App.tsx'
 import { ThemeProvider } from './services/context/theme-context/ThemeContext.tsx'
 import  { applyTheme, type  ThemeMode , type  ThemePallete } from './styles/index.ts'
 import { BrowserRouter } from 'react-router'
-import { AuthProvider } from './services/context/auth-context/AuthContext.tsx'
+import { AuthProvider } from './services/context/auth-context/AuthContext.tsx';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 
 const bootMode = ((): ThemeMode => {
@@ -29,7 +31,9 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter >
       <AuthProvider >
        <ThemeProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
       <App />
+        </LocalizationProvider>
      </ThemeProvider>
      </AuthProvider>
     </BrowserRouter>

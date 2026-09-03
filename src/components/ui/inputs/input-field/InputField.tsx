@@ -14,6 +14,7 @@ type InputFieldProps = {
   inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']
   autoComplete?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur? : () => void;
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
@@ -30,6 +31,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       maxLength,
       inputMode,
       autoComplete,
+      onBlur,
       onChange,
     },
     ref,
@@ -65,6 +67,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             onChange={onChange}
             disabled={disabled}
             required={required}
+            onBlur={onBlur}
             aria-invalid={Boolean(error)}
             aria-describedby={error ? `${name}-error` : undefined}
             autoComplete={

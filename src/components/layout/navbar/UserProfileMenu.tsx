@@ -111,9 +111,7 @@ const UserProfileMenu = () => {
                 {user?.rolename}
               </p>
               <p className="truncate text-xs text-app-text-muted">
-               
-                    {user.tenantName}`
-                
+                  {user.tenantName}
               </p>
             </div>
           </div>
