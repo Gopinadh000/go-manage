@@ -1,38 +1,40 @@
 import React from "react";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import type { Dayjs } from "dayjs";
-import  type { DatePickerProps } from "./date-picker.types";
+import type { DatePickerProps } from "./date-picker.types";
 
-
-
-
-
-const DatePickerField = ({ label, value, required = false, disabled = false, error, placeholder = "Select date" , onChange } :DatePickerProps) => {
+const DatePickerField = ({
+  label,
+  value,
+  required = false,
+  disabled = false,
+  error,
+  placeholder = "Select date",
+  onChange,
+}: DatePickerProps) => {
   return (
-     <div className="flex w-full flex-col gap-1">
-      {
-        label && (
-          <label className="text-sm font-medium text-app-text">{label}
-           {required && <span className="ml-1 text-red-500">* </span>}
-          </label>
-        )
-      }
+    <div className="flex w-full flex-col gap-1">
+      {label && (
+        <label className="text-sm font-medium text-app-text">
+          {label}
+          {required && <span className="ml-1 text-red-500">* </span>}
+        </label>
+      )}
 
-      <DesktopDatePicker 
-        value={value} 
+      <DesktopDatePicker
+        value={value}
         onChange={onChange}
         disabled={disabled}
         format="DD/MM/YYYY"
         slotProps={{
-          field : {
-            clearable : true,
+          field: {
+            clearable: true,
           },
-          textField :{
-             fullWidth : true,
-             size : "small",
+          textField: {
+            fullWidth: true,
+            size: "small",
             //  placeholder={placeholder},
-             error : !!error,
-             helperText : error
+            error: !!error,
+            helperText: error,
           },
         }}
         sx={{
@@ -68,8 +70,8 @@ const DatePickerField = ({ label, value, required = false, disabled = false, err
           },
         }}
       />
-     </div>
-  )
+    </div>
+  );
 };
 
 export default DatePickerField;

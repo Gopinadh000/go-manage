@@ -4,10 +4,14 @@ import PageHeader from "../../../components/ui/page-header/PageHeader"
 import { AddOutlined } from "@mui/icons-material"
 import UsersDataTable from "./components/users-datatable/UsersDataTable"
 import CreateUser from "./components/create-user/CreateUser"
+import useTableRefresh from "../../../components/ui/data-table/hooks/useTableRefresh"
 
 
 const UsersPage = () => {
   const [open , setOpen] = useState(false)
+    const {refreshKey, refreshTable } =useTableRefresh()
+
+  
 
 
   return (
@@ -17,9 +21,9 @@ const UsersPage = () => {
       subtitle="Manage team members and roles." 
       children={<Button startIcon={<AddOutlined />} label="Create User" size="sm" onClick={() => {setOpen(true)}} />} />
      <div className="flex-1 min-h-0 ">
-       <UsersDataTable />
+       <UsersDataTable  reloadTable={refreshKey} />
      </div> 
-      <CreateUser  open={open} onClose={()=> setOpen(false)}/>
+      <CreateUser  open={open} onClose={()=> setOpen(false)}  refreshTable={refreshTable}/>
     </div>
   )
 }

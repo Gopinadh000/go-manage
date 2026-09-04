@@ -1,69 +1,69 @@
-import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Check,
   DarkModeOutlined,
   LightModeOutlined,
   LogoutOutlined,
   KeyboardArrowDown,
-} from '@mui/icons-material'
-import { useAuth } from '../../../services/context/auth-context/AuthContext'
-import { useTheme } from '../../../services/context/theme-context/ThemeContext'
+} from "@mui/icons-material";
+import { useAuth } from "../../../services/context/auth-context/AuthContext";
+import { useTheme } from "../../../services/context/theme-context/ThemeContext";
 import {
   brandPalettes,
   palleteLabels,
   type ThemePallete,
-} from '../../../styles'
+} from "../../../styles";
 
-const PALETTE_OPTIONS = Object.keys(brandPalettes) as ThemePallete[]
+const PALETTE_OPTIONS = Object.keys(brandPalettes) as ThemePallete[];
 
 function getInitials(name?: string | null) {
-  if (!name?.trim()) return 'U'
-  const parts = name.trim().split(/\s+/)
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase()
-  return `${parts[0][0]}${parts[1][0]}`.toUpperCase()
+  if (!name?.trim()) return "U";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
 }
 
 const UserProfileMenu = () => {
-  const [open, setOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const { user, logout } = useAuth()
-  const { mode, palette, setMode, setPallete } = useTheme()
-  const navigate = useNavigate()
+  const { user, logout } = useAuth();
+  const { mode, palette, setMode, setPallete } = useTheme();
+  const navigate = useNavigate();
 
   const displayName =
-    [user?.firstName, user?.lastName].filter(Boolean).join(' ').trim() ||
-    'User'
-  const initials = getInitials(displayName)
+    [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim() ||
+    "User";
+  const initials = getInitials(displayName);
 
   useEffect(() => {
-    if (!open) return
+    if (!open) return;
 
     const onPointerDown = (event: MouseEvent) => {
       if (!menuRef.current?.contains(event.target as Node)) {
-        setOpen(false)
+        setOpen(false);
       }
-    }
+    };
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-    }
+      if (event.key === "Escape") setOpen(false);
+    };
 
-    document.addEventListener('mousedown', onPointerDown)
-    document.addEventListener('keydown', onKeyDown)
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
 
     return () => {
-      document.removeEventListener('mousedown', onPointerDown)
-      document.removeEventListener('keydown', onKeyDown)
-    }
-  }, [open])
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
 
   const handleLogout = async () => {
-    setOpen(false)
-    await logout()
-    navigate('/login', { replace: true })
-  }
+    setOpen(false);
+    await logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <div ref={menuRef} className="relative">
@@ -76,7 +76,7 @@ const UserProfileMenu = () => {
           flex items-center gap-2 rounded-[3px] px-1.5 py-1
           transition-colors
           hover:bg-app-surface-muted
-          ${open ? 'bg-app-surface-muted' : ''}
+          ${open ? "bg-app-surface-muted" : ""}
         `}
       >
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-app-primary-500 text-xs font-semibold text-app-text-inverse">
@@ -88,7 +88,7 @@ const UserProfileMenu = () => {
         <KeyboardArrowDown
           sx={{ fontSize: 16 }}
           className={`text-app-text-muted transition-transform duration-150 ${
-            open ? 'rotate-180' : ''
+            open ? "rotate-180" : ""
           }`}
         />
       </button>
@@ -107,11 +107,9 @@ const UserProfileMenu = () => {
               <p className="truncate text-sm font-semibold text-app-text">
                 {displayName}
               </p>
-              <p>
-                {user?.rolename}
-              </p>
+              <p>{user?.rolename}</p>
               <p className="truncate text-xs text-app-text-muted">
-                  {user.tenantName}
+                {user.tenantName}
               </p>
             </div>
           </div>
@@ -133,11 +131,11 @@ const UserProfileMenu = () => {
                 <button
                   type="button"
                   role="menuitem"
-                  onClick={() => setMode('light')}
+                  onClick={() => setMode("light")}
                   className={`flex flex-1 items-center justify-center gap-1.5 rounded-[3px] py-1.5 text-xs font-medium transition-colors ${
-                    mode === 'light'
-                      ? 'bg-app-surface text-app-text shadow-sm'
-                      : 'text-app-text-muted hover:text-app-text'
+                    mode === "light"
+                      ? "bg-app-surface text-app-text shadow-sm"
+                      : "text-app-text-muted hover:text-app-text"
                   }`}
                 >
                   <LightModeOutlined sx={{ fontSize: 15 }} />
@@ -146,11 +144,11 @@ const UserProfileMenu = () => {
                 <button
                   type="button"
                   role="menuitem"
-                  onClick={() => setMode('dark')}
+                  onClick={() => setMode("dark")}
                   className={`flex flex-1 items-center justify-center gap-1.5 rounded-[3px] py-1.5 text-xs font-medium transition-colors ${
-                    mode === 'dark'
-                      ? 'bg-app-surface text-app-text shadow-sm'
-                      : 'text-app-text-muted hover:text-app-text'
+                    mode === "dark"
+                      ? "bg-app-surface text-app-text shadow-sm"
+                      : "text-app-text-muted hover:text-app-text"
                   }`}
                 >
                   <DarkModeOutlined sx={{ fontSize: 15 }} />
@@ -170,7 +168,7 @@ const UserProfileMenu = () => {
               </div>
               <div className="flex items-center justify-between gap-2">
                 {PALETTE_OPTIONS.map((option) => {
-                  const selected = palette === option
+                  const selected = palette === option;
                   return (
                     <button
                       key={option}
@@ -183,7 +181,7 @@ const UserProfileMenu = () => {
                       className={`
                         relative flex h-6 w-6 items-center justify-center
                         transition-transform hover:scale-105
-                        ${selected ? 'ring-2 ring-app-primary-500 ring-offset-2 ring-offset-app-surface' : ''}
+                        ${selected ? "ring-2 ring-app-primary-500 ring-offset-2 ring-offset-app-surface" : ""}
                       `}
                     >
                       <span
@@ -197,7 +195,7 @@ const UserProfileMenu = () => {
                         />
                       ) : null}
                     </button>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -219,7 +217,7 @@ const UserProfileMenu = () => {
         </div>
       ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default UserProfileMenu
+export default UserProfileMenu;

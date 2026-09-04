@@ -14,20 +14,18 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const TablePagination = ({
-  pagination,
-  onPageChange,
-}: PaginationProps) => {
+const TablePagination = ({ pagination, onPageChange }: PaginationProps) => {
   const { page, pageSize, totalPages, totalItems } = pagination;
+
+  const startItem = totalItems === 0 ? 0 : (page - 1) * pageSize + 1;
+
+  const endItem = Math.min(page * pageSize, totalItems);
 
   let startPage = page;
 
   if (page > totalPages - 2) {
     startPage = Math.max(1, totalPages - 2);
   }
-
-  const startItem = (page - 1) * pageSize + 1;
-  const endItem = Math.min(page * pageSize, totalItems);
 
   const visiblePages = Array.from(
     { length: Math.min(3, totalPages) },
@@ -46,25 +44,18 @@ const TablePagination = ({
 
   return (
     <div className="h-[60px] shrink-0 flex items-center justify-between border rounded-b-sm border-app-border px-4">
-
-      {/* Showing information */}
       <div>
-        <span className="text-xs text-app-text-muted">
-          Showing{" "}
-          <span className="font-medium text-app-text">
-            {startItem} – {endItem}
-          </span>{" "}
-          of{" "}
-          <span className="font-medium text-app-text">
-            {totalItems}
-          </span>
-        </span>
+        <div className="text-sm text-app-text-muted">
+          Displaying <strong>{startItem}</strong>
+          {" to "}
+          <strong>{endItem}</strong>
+          {" (out of "}
+          <strong>{totalItems}</strong>
+          {" )"}
+        </div>
       </div>
 
-      {/* Pagination controls */}
       <div className="flex items-center gap-1">
-
-        {/* Previous */}
         <button
           type="button"
           disabled={page === 1}
@@ -111,7 +102,6 @@ const TablePagination = ({
           ))}
         </div>
 
-        {/* Next */}
         <button
           type="button"
           disabled={page === totalPages}
@@ -129,9 +119,8 @@ const TablePagination = ({
           "
           aria-label="Next page"
         >
-          <KeyboardArrowRightIcon sx={{ fontSize: 22}} />
+          <KeyboardArrowRightIcon sx={{ fontSize: 22 }} />
         </button>
-
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
-export const validateUserField = (
-  field: string,
-  value: unknown
-): string => {
+
+
+
+
+
+export const validateUserField = (field: string, value: unknown): string => {
   switch (field) {
     case "firstName":
       if (!value || !String(value).trim()) {
@@ -30,8 +32,7 @@ export const validateUserField = (
         return "Email is required";
       }
 
-      const emailRegex =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!emailRegex.test(String(value))) {
         return "Enter a valid email address";

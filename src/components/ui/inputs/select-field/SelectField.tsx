@@ -21,7 +21,7 @@ const Select = ({
   placeholder = "Select an option",
 }: SelectProps) => {
   return (
-    <div className="flex flex-col gap-1.5 w-full">
+    <div className="flex flex-col gap-1 w-full">
       {/* Label */}
       {label && (
         <label className="text-sm font-medium text-app-text">
@@ -57,7 +57,7 @@ const Select = ({
               color: "var(--app-text-muted)",
             },
             "& .MuiSelect-select": {
-              py: 1,
+              py: 1.20,
             },
           }}
           renderValue={(selected) => {

@@ -10,6 +10,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { validateUserField } from "./validation";
 import { useApi } from "../../../../../services/api";
 
+
 const roleOptions = [
   {
     label: "Super Admin",
@@ -25,7 +26,7 @@ const roleOptions = [
   },
 ];
 
-const CreateUser = ({ open, onClose }) => {
+const CreateUser = ({ open, onClose , refreshTable}) => {
 
   const { POST } = useApi()
 
@@ -134,7 +135,33 @@ const CreateUser = ({ open, onClose }) => {
     };
      
     const resData = await POST("/users/user",  payload);
-    console.log(resData , 'resData')
+
+    if(!resData?.status){
+      console.error(resData?.statusMessage)
+    }
+
+    if (resData?.status) {
+      refreshTable()
+      onClose()
+    }
+
+   
+
+    setUserData({
+       firstName: "",
+    lastName: "",
+    email: "",
+    dob: null,
+    role: 0,
+    })
+
+    setErrors({
+       firstName: "",
+    lastName: "",
+    email: "",
+    dob: "",
+    role: "",
+    })
   };
 
   return (

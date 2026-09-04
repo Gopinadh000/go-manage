@@ -1,10 +1,35 @@
-const ProjectsPage = () => {
-  return (
-    <div className="rounded-md border border-app-border bg-app-surface p-4">
-      <h1 className="text-xl font-semibold text-app-text">Projects</h1>
-      <p className="mt-1 text-sm text-app-text-muted">Track and organize projects.</p>
-    </div>
-  )
-}
 
-export default ProjectsPage
+import PageHeader from "../../../components/ui/page-header/PageHeader";
+import { AddOutlined } from "@mui/icons-material";
+import { useState } from "react";
+import Button from "../../../components/ui/button/Button";
+import ProjectsDataTable from "./components/projects-datatable/ProjectsDataTable";
+
+const ProjectsPage = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="h-full  border-app-border rounded-md flex flex-col overflow-hidden">
+      <PageHeader
+        title="Projects"
+        subtitle="6 projects in your workspace"
+        children={
+          <Button
+            startIcon={<AddOutlined />}
+            label="Add Project"
+            size="sm"
+            onClick={() => {
+              setOpen(true);
+            }}
+          />
+        }
+      />
+      <div className="flex-1 min-h-0 ">
+        <ProjectsDataTable />
+
+      </div>
+    </div>
+  );
+};
+
+export default ProjectsPage;
