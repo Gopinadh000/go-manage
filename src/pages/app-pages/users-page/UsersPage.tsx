@@ -22,7 +22,7 @@ const usersTabs = [
   {
     id: "dashboard",
     key: "dashboard",
-    label: "Board",
+    label: "Cards",
     icon: <ViewKanbanOutlinedIcon sx={{ fontSize: 20 }} />,
     default: false,
   },

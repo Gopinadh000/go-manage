@@ -1,7 +1,6 @@
 import React from "react";
 import UserCard from "./components/UserCard";
 
-
 export const users = [
   {
     id: 1,
@@ -49,7 +48,6 @@ export const users = [
   },
 ];
 
-
 const UserCards = () => {
   return (
     <div
@@ -74,10 +72,7 @@ const UserCards = () => {
         "
       >
         {users.map((user) => (
-          <UserCard
-            key={user.id}
-            user={user}
-          />
+          <UserCard key={user.id} user={user} />
         ))}
       </div>
     </div>

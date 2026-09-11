@@ -1,5 +1,4 @@
 import React from "react";
-import type { SelectConfig } from "./select.types";
 import {
   FormControl,
   FormHelperText,

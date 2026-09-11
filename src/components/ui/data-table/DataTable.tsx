@@ -124,7 +124,7 @@ const DataTable = ({
             {items?.map((item) => (
               <tr
                 key={item[rowKey]}
-                className="border-b border-app-border hover:bg-app-bg"
+                className="group border-b border-app-border hover:bg-app-bg "
               >
                 {headers.map((header) => (
                   <td
