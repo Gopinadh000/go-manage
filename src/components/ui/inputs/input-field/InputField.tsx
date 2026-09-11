@@ -75,13 +75,13 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             }
             className={[
               'h-10 w-full rounded-[3px] border bg-app-surface px-3 text-sm text-app-text',
-              'outline-none ring-0 transition-[border-color,box-shadow] duration-150',
+              'outline-none ring-0 transition-[app-border, box-shadow] duration-100',
               'placeholder:text-app-text-muted',
               'disabled:cursor-not-allowed disabled:bg-app-surface-muted disabled:text-app-text-muted',
               isPassword ? 'pr-10' : '',
               error
-                ? 'border-app-error hover:border-app-error focus:border-app-error focus:ring-2 focus:ring-app-error-soft'
-                : 'border-app-border-strong hover:border-app-primary-500 hover:ring-1 hover:ring-app-primary-100 focus:border-app-primary-500 focus:ring-2 focus:ring-app-primary-100',
+                ? 'hover:border-app-error focus:border-app-error focus:ring-2 focus:ring-app-error-soft'
+                : 'hover:border-app-primary-500 hover:ring-1 hover:ring-app-primary-100 focus:border-app-primary-500 focus:ring-2 focus:ring-app-primary-100',
             ].join(' ')}
           />
 

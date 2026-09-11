@@ -12,54 +12,43 @@ const taskTabs = [
     key: "list",
     label: "List",
     icon: <FormatListBulletedIcon sx={{ fontSize: 20 }} />,
-    default :true
+    default: true,
   },
   {
     id: "board",
     key: "board",
     label: "Board",
     icon: <ViewKanbanOutlinedIcon sx={{ fontSize: 20 }} />,
-    default : false
+    default: false,
   },
 ];
 
-
-
 const TasksPage = () => {
-  const [open , setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-
-  return ( <div className="h-full  border-app-border rounded-md flex flex-col overflow-hidden">
+  return (
+    <div className="h-full  border-app-border rounded-md flex flex-col overflow-hidden">
       <PageHeader
         title="Tasks"
         subtitle="Track and manage your personal tasks"
         children={
           <div className="flex items-center gap-4">
-            <Tabs
-  tabs={taskTabs}
-  defaultTab="list"
-/>
+            <Tabs tabs={taskTabs} defaultTab="list" />
 
-
-             <Button
-            startIcon={<AddOutlined />}
-            label="Add Project"
-            size="sm"
-            onClick={() => {
-              setOpen(true);
-            }}
-          />
-
-
-            </div>
-         
+            <Button
+              startIcon={<AddOutlined />}
+              label="Add Project"
+              size="sm"
+              onClick={() => {
+                setOpen(true);
+              }}
+            />
+          </div>
         }
       />
-      <div className="flex-1 min-h-0 ">
-       
-
-      </div>
-    </div>)
+      <div className="flex-1 min-h-0 "></div>
+    </div>
+  );
 };
 
 export default TasksPage;

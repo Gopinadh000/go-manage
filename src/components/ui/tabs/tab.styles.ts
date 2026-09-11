@@ -1,11 +1,5 @@
 import type { TabsVariant } from "./tabs.types";
 
-interface TabStyleProps {
-  variant: TabsVariant;
-  isActive: boolean;
-  disabled?: boolean;
-}
-
 export const getTabsContainerClass = (
   variant: TabsVariant,
 ) => {
@@ -13,12 +7,15 @@ export const getTabsContainerClass = (
     case "segmented":
       return `
         inline-flex
+        w-full
         items-center
         rounded-lg
         border
         border-app-border
         bg-app-surface
         p-0.5
+
+        tablet:w-auto
       `;
 
     case "underline":
@@ -50,7 +47,11 @@ export const getTabClass = ({
   variant,
   isActive,
   disabled,
-}: TabStyleProps) => {
+}: {
+  variant: TabsVariant;
+  isActive: boolean;
+  disabled?: boolean;
+}) => {
   const disabledClass = disabled
     ? "cursor-not-allowed opacity-50"
     : "cursor-pointer";
@@ -59,17 +60,24 @@ export const getTabClass = ({
     case "segmented":
       return `
         inline-flex
-        h-8
+        flex-1
         items-center
+        justify-center
         gap-2
         rounded-md
-        px-2
+        px-3
+        py-1.5
         text-sm
         font-medium
         outline-none
         transition-colors
         duration-150
+
+        tablet:flex-none
+        tablet:px-4
+
         ${disabledClass}
+
         ${
           isActive
             ? "bg-app-primary-500 text-app-text-inverse"
@@ -90,12 +98,15 @@ export const getTabClass = ({
         outline-none
         transition-colors
         duration-150
+
         ${disabledClass}
+
         ${
           isActive
             ? "text-app-primary-500"
             : "text-app-text-muted hover:text-app-text"
         }
+
         ${
           isActive
             ? "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-app-primary-500"
@@ -117,12 +128,15 @@ export const getTabClass = ({
         outline-none
         transition-colors
         duration-150
+
         ${disabledClass}
+
         ${
           isActive
             ? "bg-app-primary-500 text-app-text-inverse"
             : "bg-app-surface text-app-text hover:bg-app-bg"
         }
+
         first:rounded-l-md
         last:rounded-r-md
       `;

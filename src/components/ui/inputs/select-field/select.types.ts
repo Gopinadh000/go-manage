@@ -13,3 +13,11 @@ export interface SelectConfig {
 
   disabled?: boolean;
 }
+
+export interface SelectProps {
+  label?: string;
+  required?: boolean;
+  placeholder?: string;
+  onChange : ()=> void;
+
+}
