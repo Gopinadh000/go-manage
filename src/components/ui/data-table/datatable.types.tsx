@@ -2,6 +2,7 @@ import React from "react";
 export interface DataTableHeader {
     key : string;
     label :string;
+    fieldName :string;
 };
 
 export interface DataTablePagination {

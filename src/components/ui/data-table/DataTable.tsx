@@ -19,7 +19,7 @@ const DataTable = ({
     items: [],
     pagination: {
       page: 1,
-      pageSize: 10,
+      pageSize: 2,
       totalItems: 0,
       totalPages: 0,
     },
@@ -29,7 +29,6 @@ const DataTable = ({
   const { headers, items, pagination } = tableData;
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
-  console.log(pagination, "pagination");
 
   const fetchTableData = async (page: number) => {
     try {
@@ -58,7 +57,9 @@ const DataTable = ({
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTableData(pagination.page);
-  }, [refreshKey]);
+  }, [refreshKey, pagination.page ]);
+
+
 
   const handleSelectRow = (id: string) => {
     setSelectedRows((prev) =>
@@ -75,6 +76,7 @@ const DataTable = ({
   };
 
   const handlePageChange = (page: number) => {
+    console.log(page , "page")
     setTableData((prev) => ({
       ...prev,
       pagination: {
@@ -121,32 +123,40 @@ const DataTable = ({
           </thead>
 
           <tbody>
-            {items?.map((item) => (
-              <tr
-                key={item[rowKey]}
-                className="group border-b border-app-border hover:bg-app-bg "
-              >
-                {headers.map((header) => (
-                  <td
-                    key={header.key}
-                    className="px-4 py-3 text-sm  text-app-text"
-                  >
-                    {header.key === "select" ? (
-                      <input
-                        className="w-4 h-4 rounded-none outline-none checked:bg-app-primary-50"
-                        type="checkbox"
-                        checked={selectedRows.includes(item[rowKey])}
-                        onChange={() => handleSelectRow(item[rowKey])}
-                      />
-                    ) : getCustomCell(header.key) ? (
-                      getCustomCell(header.key)!.cell(item[header.key], item)
-                    ) : (
-                      (item[header.key] ?? "")
-                    )}
-                  </td>
-                ))}
+            {items.length > 0 ? (
+              items?.map((item) => (
+                <tr
+                  key={item[rowKey]}
+                  className="group border-b border-app-border hover:bg-app-bg "
+                >
+                  {headers.map((header) => (
+                    <td
+                      key={header.key}
+                      className="px-4 py-3 text-sm  text-app-text"
+                    >
+                      {header.key === "select" ? (
+                        <input
+                          className="w-4 h-4 rounded-none outline-none checked:bg-app-primary-50"
+                          type="checkbox"
+                          checked={selectedRows.includes(item[rowKey])}
+                          onChange={() => handleSelectRow(item[rowKey])}
+                        />
+                      ) : getCustomCell(header.key) ? (
+                        getCustomCell(header.key)!.cell(item[header.key], item)
+                      ) : (
+                        (item[header.key] ?? "")
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : (
+              <tr className="group border-b border-app-border hover:bg-app-bg ">
+                <td className="flex ">
+                  <span>No Data To Display</span>
+                </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

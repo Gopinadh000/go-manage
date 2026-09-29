@@ -5,6 +5,7 @@ import type { TextAreaProps } from "./textarea.types";
 const TextArea = ({
   label,
   value,
+  name,
   placeholder = "Enter Description",
   required,
   disabled,
@@ -25,6 +26,7 @@ const TextArea = ({
         </label>
       )}
       <textarea
+        name={name}
         className={getTextAreaClasses({ error, disabled })}
         readOnly={readOnly}
         id={name}

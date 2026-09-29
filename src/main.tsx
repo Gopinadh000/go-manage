@@ -32,7 +32,7 @@ createRoot(document.getElementById('root')!).render(
       <AuthProvider >
        <ThemeProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <App />
+          <App />
         </LocalizationProvider>
      </ThemeProvider>
      </AuthProvider>

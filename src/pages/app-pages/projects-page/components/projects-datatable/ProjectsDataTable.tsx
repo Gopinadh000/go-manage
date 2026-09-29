@@ -4,7 +4,7 @@ import DataTable from "../../../../../components/ui/data-table/DataTable";
 const ProjectsDataTable = () => {
   return  (
      <div className="flex flex-col h-full bg-app-bg ">
-        <DataTable  tableUrlConfig={{ pageName: "project" }} rowKey={""} refreshKey={""}/>
+        <DataTable  tableUrlConfig={{ pageName: "/projects" }} rowKey={""} refreshKey={""}/>
      </div>
   )
 };

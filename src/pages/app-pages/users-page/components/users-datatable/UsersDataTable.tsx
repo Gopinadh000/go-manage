@@ -4,6 +4,7 @@ import { EditOutlined } from "@mui/icons-material";
 import { DeleteOutlineOutlined } from "@mui/icons-material";
 
 const UsersDataTable = ({ reloadTable }: any) => {
+  
   const handleEdit = (row: any) => {
     console.log("Edit user:", row);
   };
@@ -67,6 +68,7 @@ const UsersDataTable = ({ reloadTable }: any) => {
                     transition-colors
                     hover:bg-app-primary-50
                     hover:text-app-primary-500
+                    cursor-pointer
                   "
                 >
                   <EditOutlined sx={{ fontSize: 18 }} />
