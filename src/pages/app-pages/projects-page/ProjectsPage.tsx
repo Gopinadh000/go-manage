@@ -5,8 +5,10 @@ import { useState } from "react";
 import Button from "../../../components/ui/button/Button";
 import ProjectsDataTable from "./components/projects-datatable/ProjectsDataTable";
 import CreateProjectModal from "./components/create-project/CreateProjectModal";
+import useTableRefresh from "../../../components/ui/data-table/hooks/useTableRefresh";
 
 const ProjectsPage = () => {
+  const { refreshKey, refreshTable } =useTableRefresh()
   const [open, setOpen] = useState(false);
 
   return (
@@ -25,10 +27,10 @@ const ProjectsPage = () => {
           />
         }
       />
-      <div className="flex-1 min-h-0 ">
-        <ProjectsDataTable />
+      <div className="flex-1 min-h-0">
+        <ProjectsDataTable  refreshKey={refreshKey}/>
       </div>
-      <CreateProjectModal  open={open}  onClose={()=> setOpen(false)}  />
+      <CreateProjectModal  open={open}  onClose={()=>setOpen(false)}  refreshTable={refreshTable} />
     </div>
   );
 };

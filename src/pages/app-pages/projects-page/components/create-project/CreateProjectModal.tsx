@@ -10,7 +10,7 @@ import { useApi } from "../../../../../services/api";
 import { useGraphQL } from "../../../../../services/api/useGrapghQL";
 import { CREATE_PROJECT_MUTATION } from "../../../../../graphql/mutations/project.mutations";
 
-const CreateProjectModal = ({ open, onClose }: any) => {
+const CreateProjectModal = ({ open, onClose, refreshTable }: any) => {
   const {GET} =useApi()
   const {execute , loading } = useGraphQL();
 
@@ -59,16 +59,15 @@ const handleMemberChange =(e)=> {
     }
 
     try{
-
       const responseData =  await execute(CREATE_PROJECT_MUTATION , payloadInput )
+      refreshTable()
+      onClose()
+      setProjectData("")
       console.log("Created project:", responseData);
     }catch(error){
       console.error("Create project failed:", error);
 
     }
-
-
-
 
   };
 
@@ -108,6 +107,7 @@ const handleMemberChange =(e)=> {
               label="Save"
               startIcon={<SaveIcon />}
               onClick={handleSubmitProject}
+              disabled={loading ? true :  false}
             />
           </div>
         }
