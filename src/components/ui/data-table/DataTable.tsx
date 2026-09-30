@@ -87,7 +87,7 @@ const DataTable = ({
   };
 
   const getCustomCell = (fieldName: string) => {
-    return customCells?.find((cell) => cell.fieldName === fieldName);
+    return customCells?.find((cell) => cell?.fieldName === fieldName);
   };
 
   return (
@@ -144,7 +144,7 @@ const DataTable = ({
                       ) : getCustomCell(header.key) ? (
                         getCustomCell(header.key)!.cell(item[header.key], item)
                       ) : (
-                        (item[header.key] ?? "")
+                        (item[header?.key] ?? "")
                       )}
                     </td>
                   ))}
