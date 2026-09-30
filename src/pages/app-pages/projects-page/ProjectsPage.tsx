@@ -28,7 +28,7 @@ const ProjectsPage = () => {
         }
       />
       <div className="flex-1 min-h-0">
-        <ProjectsDataTable  refreshKey={refreshKey}/>
+        <ProjectsDataTable  refreshKey={refreshKey} reloadTable={refreshTable}/>
       </div>
       <CreateProjectModal  open={open}  onClose={()=>setOpen(false)}  refreshTable={refreshTable} />
     </div>

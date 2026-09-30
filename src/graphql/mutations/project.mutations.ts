@@ -26,15 +26,13 @@ export const CREATE_PROJECT_MUTATION = `
 export const UPDATE_PROJECT_MUTATION = `
 
 
-
-
-
 `;
 
 export const DELETE_PROJECT_MUTATION = `
-
-
-
-
-
+  mutation DeleteProject($id: ID!) {
+    deleteProject(id: $id){
+     status
+     statusMessage
+    }
+  }
 `;

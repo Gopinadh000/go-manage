@@ -2,16 +2,32 @@ import React from "react";
 import DataTable from "../../../../../components/ui/data-table/DataTable";
 import { EditOutlined } from "@mui/icons-material";
 import { DeleteOutlineOutlined } from "@mui/icons-material";
+import { useGraphQL } from "../../../../../services/api/useGrapghQL";
+import { DELETE_PROJECT_MUTATION } from "../../../../../graphql/mutations/project.mutations";
 
-const ProjectsDataTable = ({ refreshKey }) => {
+const ProjectsDataTable = ({ refreshKey, reloadTable }) => {
+  const { execute, loading, error } = useGraphQL();
 
    const handleEdit = (row: any) => {
     console.log("Edit user:", row);
   };
 
-  const handleDelete = (row: any) => {
-    console.log("Delete user:", row);
+  const handleDelete =  async (row: any) => {
+
+    try{
+      const projectid = row?.projectid
+      const result = await execute(DELETE_PROJECT_MUTATION , {id : projectid });
+      const resData = result.deleteProject.status 
+      if(!resData){
+        console.info(resData.statusMessage)
+      }
+        console.info(resData.statusMessage)
+        reloadTable()
+    }catch(error){
+      console.error("Delete Project Failed", error)
+    }
   };
+
   return (
     <div className="flex flex-col h-full bg-app-bg ">
       <DataTable
