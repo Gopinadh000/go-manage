@@ -1,105 +1,92 @@
-import fs from "fs";
-import { fileURLToPath } from "url";
-import path from "path";
-import dotenv from "dotenv";
-import { XMLParser , XMLValidator } from "fast-xml-parser";
-import {db} from  "../db-config/mysql-config.js";
-import { consoleBox } from "../utils/common.js";
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import dotenv from 'dotenv';
+import { XMLParser, XMLValidator } from 'fast-xml-parser';
+import { db } from '../db-config/mysql-config.js';
+import { consoleBox } from '../utils/common.js';
 
 dotenv.config();
 
-const __fileName  =  fileURLToPath(import.meta.url);
-const __dirName   = path.dirname(__fileName);
+const __fileName = fileURLToPath(import.meta.url);
+const __dirName = path.dirname(__fileName);
 
-const AUTO_MIGRATE_DATABASE = process.env.AUTO_DB_MIGRATE ? process.env.AUTO_DB_MIGRATE.toLowerCase() === "true" : false;
+const AUTO_MIGRATE_DATABASE = process.env.AUTO_DB_MIGRATE
+  ? process.env.AUTO_DB_MIGRATE.toLowerCase() === 'true'
+  : false;
 
 console.log(AUTO_MIGRATE_DATABASE);
 
-const XML_FILE = path.join(
-    __dirName,
-    "migrations-v1.xml"
-);
+const XML_FILE = path.join(__dirName, 'migrations-v1.xml');
 
-const SQL_FILE = path.join(
-    __dirName,
-    "migrations-v1.sql"
-);
+const SQL_FILE = path.join(__dirName, 'migrations-v1.sql');
 
+const reaXMLFileAsStream = () => {
+  return new Promise((resolve, reject) => {
+    try {
+      let data = '';
+      const stream = fs.createReadStream(XML_FILE);
+      stream.on('data', (chunk) => {
+        data += chunk.toString();
+      });
+      stream.on('end', () => {
+        resolve(data);
+      });
+      stream.on('error', (error) => {
+        reject(error);
+      });
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
+};
 
-const reaXMLFileAsStream = ()=> {
-    return new Promise((resolve,  reject) => {
-        try {
+const validateXMLFile = (xmldata) => {
+  const result = XMLValidator.validate(xmldata);
 
-            let data ="";
-            const stream = fs.createReadStream(XML_FILE);
-            stream.on("data", (chunk) => {
-                data += chunk.toString();
-            });
-            stream.on("end", () => {
-                resolve(data);
-            });
-            stream.on("error", (error) => {
-                reject(error);
-            });
-        } catch (error) {
-            console.error(error);
-            reject(error);
-        }
+  if (result !== true) {
+    console.error('Migration XML validation failed');
+    console.error(result);
+    return false;
+  }
+  return true;
+};
+
+const parseXMLFile = (xmldata) => {
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    trimValues: true,
+  });
+  const json = parser.parse(xmldata);
+
+  const jsonData = json?.migrations['migration-script'];
+
+  if (!jsonData) {
+    return [];
+  }
+
+  if (jsonData.length > 0) {
+    return jsonData.map((item) => {
+      return {
+        id: item['@_id'],
+        name: item['@_name'],
+        sql: item.sql,
+      };
     });
+  }
+
+  return jsonData;
 };
 
-
-const validateXMLFile =  (xmldata) => {
-    const result =  XMLValidator.validate(xmldata);
-
-    if (result !== true) {
-        console.error("Migration XML validation failed");
-        console.error(result);
-        return false;
-    }
-    return true;
+const checkMigrationTableExists = async () => {
+  const query = `SHOW TABLES LIKE 'migration_history';`;
+  const [rows] = await db.execute(query);
+  return rows.length > 0;
 };
-
-
-const parseXMLFile = (xmldata) =>{
-    const parser  = new XMLParser({
-        ignoreAttributes: false,
-        trimValues: true
-    });
-    const json = parser.parse(xmldata);
-
-    
-
-    const jsonData =  json?.migrations["migration-script"];
-
-    if (!jsonData) {
-        return [];
-    }
-    
-    if(jsonData.length > 0){
-        return jsonData.map(item => {
-            return {
-                id: item["@_id"],
-                name: item["@_name"],
-                sql: item.sql
-            }
-        });
-    }
-   
-    return jsonData
-};
-
-
-const checkMigrationTableExists = async ()=>{
-    const query = `SHOW TABLES LIKE 'migration_history';`;
-    const [rows] = await db.execute(query);
-    return rows.length > 0;
-}
-
 
 const createMigrationTable = async () => {
-
-    const query = `
+  const query = `
         CREATE TABLE IF NOT EXISTS migration_history (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
             migration_id VARCHAR(50) NOT NULL,
@@ -111,13 +98,11 @@ const createMigrationTable = async () => {
                 (migration_id)
         );
     `;
-    await db.execute(query);
+  await db.execute(query);
 };
 
-
 const getExecutedMigrations = async () => {
-
-    const query = `
+  const query = `
         SELECT
             migration_id,
             migrationname
@@ -125,53 +110,30 @@ const getExecutedMigrations = async () => {
         ORDER BY id ASC;
     `;
 
-    const [rows] =
-        await db.execute(query);
+  const [rows] = await db.execute(query);
 
-    return rows;
+  return rows;
 };
 
-const checkMigrationExecuted = (
-    executedMigrations,
-    migration
-) => {
-
-    return executedMigrations.some(
-        (item) => {
-
-            return (
-                String(item.migration_id) ===
-                    String(migration.id)
-                &&
-                item.migrationname ===
-                    migration.name
-            );
-
-        }
+const checkMigrationExecuted = (executedMigrations, migration) => {
+  return executedMigrations.some((item) => {
+    return (
+      String(item.migration_id) === String(migration.id) &&
+      item.migrationname === migration.name
     );
+  });
 };
 
+const appendSQLFile = async (migration) => {
+  const content =
+    `-- Migration ${migration.id}: ${migration.name}\n` +
+    `${migration.sql.trim()}\n\n`;
 
-const appendSQLFile = async (
-    migration
-) => {
-
-    const content = `-- Migration ${migration.id}: ${migration.name} ${migration.sql.trim()}`;
-
-    
-    await fs.promises.appendFile(
-        SQL_FILE,
-        content,
-        "utf-8"
-    );
+  await fs.promises.appendFile(SQL_FILE, content, 'utf-8');
 };
 
-
-const saveMigrationHistory = async (
-    migration
-) => {
-
-    const query = `
+const saveMigrationHistory = async (migration) => {
+  const query = `
         INSERT INTO migration_history
         (
             migration_id,
@@ -180,151 +142,79 @@ const saveMigrationHistory = async (
         VALUES (?, ?);
     `;
 
-    await db.execute(
-        query,
-        [
-            migration.id,
-            migration.name
-        ]
-    );
+  await db.execute(query, [migration.id, migration.name]);
 };
 
+const executeMigration = async (migration) => {
+  const { id, name, sql } = migration;
 
-const executeMigration = async (
-    migration
-) => {
+  console.log(`Running migration script ${name} with id ${id}`);
 
-    const {
-        id,
-        name,
-        sql
-    } = migration;
+  await db.execute(sql);
 
-    console.log(
-        `Running migration script ${name} with id ${id}`
-    );
+  await appendSQLFile(migration);
 
-    await db.execute(sql);
+  await saveMigrationHistory(migration);
 
-    await appendSQLFile(
-        migration
-    );
-
-    await saveMigrationHistory(
-        migration
-    );
-
-    console.log(
-        `Migration ${id} completed`
-    );
+  console.log(`Migration ${id} completed`);
 };
-
 
 export const runMigrationScripts = async () => {
+  if (!AUTO_MIGRATE_DATABASE) {
+    console.log('AUTO_MIGRATE=false');
+    console.log('Migration execution skipped');
+    return;
+  }
 
-    if (!AUTO_MIGRATE_DATABASE) {
+  const data = await reaXMLFileAsStream();
 
-        console.log("AUTO_MIGRATE=false");
-        console.log(
-            "Migration execution skipped"
-        );
-        return;
+  const isValidXML = validateXMLFile(data);
+
+  if (!isValidXML) {
+    return;
+  }
+
+  const json = parseXMLFile(data);
+
+  if (!json || json.length === 0) {
+    console.log('No migration scripts found');
+
+    return;
+  }
+
+  const migrationTableExists = await checkMigrationTableExists();
+
+  if (!migrationTableExists) {
+    consoleBox('Migration table does not exist');
+
+    await createMigrationTable();
+
+    consoleBox('Creating migration table...');
+  }
+
+  const executedMigrations = await getExecutedMigrations();
+
+  for (const item of json) {
+    const { id, name } = item;
+
+    const alreadyExecuted = checkMigrationExecuted(executedMigrations, item);
+
+    if (alreadyExecuted) {
+      console.log(`Skipping migration ${id} - ${name}`);
+
+      continue;
     }
 
+    try {
+      await executeMigration(item);
+    } catch (error) {
+      console.error(`Migration ${id} failed`);
 
-    const data =
-        await reaXMLFileAsStream();
+      console.error(error);
 
-
-    const isValidXML =
-        validateXMLFile(data);
-
-
-    if (!isValidXML) {
-        return;
+      throw error;
     }
+  }
 
-
-    const json =
-        parseXMLFile(data);
-
-
-    if (!json || json.length === 0) {
-
-        console.log(
-            "No migration scripts found"
-        );
-
-        return;
-    }
-
-
-    const migrationTableExists =
-        await checkMigrationTableExists();
-
-
-    if (!migrationTableExists) {
-
-        consoleBox("Migration table does not exist");
-
-        await createMigrationTable();
-
-
-        consoleBox("Creating migration table...");
-    }
-
-
-    const executedMigrations =
-        await getExecutedMigrations();
-
-    for (const item of json) {
-
-        const {
-            id,
-            name
-        } = item;
-
-
-        const alreadyExecuted =
-            checkMigrationExecuted(
-                executedMigrations,
-                item
-            );
-
-
-        if (alreadyExecuted) {
-
-
-            console.log(
-                `Skipping migration ${id} - ${name}`
-            );
-
-            continue;
-        }
-
-
-        try {
-
-            await executeMigration(
-                item
-            );
-
-        } catch (error) {
-
-            console.error(
-                `Migration ${id} failed`
-            );
-
-            console.error(error);
-
-            throw error;
-        }
-    }
-
-
-    consoleBox("All migration scripts completed");
+  consoleBox('All migration scripts completed');
 };
-
-
-
-
