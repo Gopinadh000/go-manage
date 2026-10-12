@@ -17,9 +17,10 @@ export type UserProps = {
   email: string;
   userStatus: string;
   tenantId: string;
-  tenantName: string;
+  tenantName?: string;
   tenantSlug: string;
   userRoleId?: number;
+  rolename?: string;
 };
 
 /** Matches backend login /auth/me `data` payload */

@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import {
   Check,
   DarkModeOutlined,
+  LanguageOutlined,
   LightModeOutlined,
   LogoutOutlined,
   KeyboardArrowDown,
@@ -16,6 +19,12 @@ import {
 } from "../../../styles";
 
 const PALETTE_OPTIONS = Object.keys(brandPalettes) as ThemePallete[];
+const LANGUAGE_OPTIONS = [
+  { value: "en", label: "English" },
+  { value: "hi", label: "हिन्दी" },
+  { value: "te", label: "తెలుగు" },
+  { value: "es", label: "Español" },
+];
 
 function getInitials(name?: string | null) {
   if (!name?.trim()) return "U";
@@ -30,12 +39,19 @@ const UserProfileMenu = () => {
 
   const { user, logout } = useAuth();
   const { mode, palette, setMode, setPallete } = useTheme();
+  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    i18next.resolvedLanguage || i18next.language || "en",
+  );
 
   const displayName =
     [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim() ||
     "User";
   const initials = getInitials(displayName);
+  const roleName = user?.rolename || "User";
+  const tenantName = user?.tenantName || "Workspace";
 
   useEffect(() => {
     if (!open) return;
@@ -58,6 +74,12 @@ const UserProfileMenu = () => {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open]);
+
+  const handleLanguageChange = (nextLanguage: string) => {
+    setSelectedLanguage(nextLanguage);
+    i18next.changeLanguage(nextLanguage);
+    localStorage.setItem("appLanguage", nextLanguage);
+  };
 
   const handleLogout = async () => {
     setOpen(false);
@@ -82,7 +104,7 @@ const UserProfileMenu = () => {
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-app-primary-500 text-xs font-semibold text-app-text-inverse">
           {initials}
         </span>
-        <span className="hidden max-w-[7.5rem] truncate text-sm font-medium text-app-text tablet:inline">
+        <span className="hidden max-w-30 truncate text-sm font-medium text-app-text tablet:inline">
           {displayName}
         </span>
         <KeyboardArrowDown
@@ -96,7 +118,7 @@ const UserProfileMenu = () => {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-1.5 w-[17.5rem] overflow-hidden rounded-[3px] border border-app-border bg-app-surface shadow-[0_8px_24px_rgb(0_0_0/0.08)]"
+          className="absolute right-0 z-50 mt-1.5 w-70 overflow-hidden rounded-[3px] border border-app-border bg-app-surface shadow-[0_8px_24px_rgb(0_0_0/0.08)]"
         >
           {/* Profile header */}
           <div className="flex items-center gap-3 px-3.5 py-3">
@@ -107,9 +129,9 @@ const UserProfileMenu = () => {
               <p className="truncate text-sm font-semibold text-app-text">
                 {displayName}
               </p>
-              <p>{user?.rolename}</p>
+              <p className="text-xs text-app-text-muted">{roleName}</p>
               <p className="truncate text-xs text-app-text-muted">
-                {user.tenantName}
+                {tenantName}
               </p>
             </div>
           </div>
@@ -194,6 +216,37 @@ const UserProfileMenu = () => {
                           className="absolute text-white"
                         />
                       ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-2 flex items-center gap-2">
+                <LanguageOutlined sx={{ fontSize: 15 }} className="text-app-text-muted" />
+                <p className="text-xs font-medium text-app-text-muted">
+                  {t("common.language")}
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {LANGUAGE_OPTIONS.map((option) => {
+                  const selected = selectedLanguage === option.value;
+
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="menuitem"
+                      aria-pressed={selected}
+                      onClick={() => handleLanguageChange(option.value)}
+                      className={`rounded-[3px] border px-2 py-1.5 text-xs font-medium transition-colors ${
+                        selected
+                          ? "border-app-primary-500 bg-app-primary-50 text-app-primary-700"
+                          : "border-app-border bg-app-surface text-app-text-muted hover:border-app-primary-200 hover:text-app-text"
+                      }`}
+                    >
+                      {option.label}
                     </button>
                   );
                 })}

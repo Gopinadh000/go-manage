@@ -1,0 +1,43 @@
+{
+  "app": {
+    "name": "Go Manage"
+  },
+  "brand": {
+    "welcome": "Bienvenido de nuevo",
+    "tagline": "Gestiona tus proyectos y tareas de forma eficiente"
+  },
+  "navigation": {
+    "dashboard": "Panel",
+    "projects": "Proyectos",
+    "tasks": "Tareas",
+    "users": "Usuarios",
+    "settings": "Configuración"
+  },
+  "login": {
+    "title": "Inicia sesión en tu cuenta",
+    "subtitle": "¡Bienvenido de nuevo! Inicia sesión para continuar.",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Ingresa tu correo",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Ingresa tu contraseña",
+    "registerPrompt": "¿No tienes una cuenta?",
+    "register": "Registrarse",
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión…"
+  },
+  "projects": {
+    "title": "Proyectos",
+    "create": "Crear proyecto",
+    "search": "Buscar proyectos",
+    "name": "Nombre del proyecto",
+    "status": "Estado",
+    "delete": "Eliminar proyecto",
+    "empty": "No se encontraron proyectos"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "language": "Idioma"
+  }
+}

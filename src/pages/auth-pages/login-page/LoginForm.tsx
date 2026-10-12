@@ -1,4 +1,5 @@
 import { useRef, useState, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../../components/ui/button/Button';
 import InputField from '../../../components/ui/inputs/input-field/InputField';
@@ -24,6 +25,7 @@ const LoginForm = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const { t } = useTranslation();
 
   const { POST, loading, error } = useApi<LoginApiResponse>();
   const { login } = useAuth();
@@ -79,19 +81,18 @@ const LoginForm = () => {
     >
       <div className='flex flex-col gap-1'>
         <h1 className='text-2xl font-medium text-app-primary-900'>
-          Login to your Account
+          {t('login.title')}
         </h1>
-        <p className='text-sm text-app-text-muted'>
-          Welcome back! Sign in to continue.
-        </p>
+        <p className='text-sm text-app-text-muted'>{t('login.subtitle')}</p>
       </div>
+
       <div className='flex flex-col gap-4'>
         <InputField
           ref={emailRef}
-          label='Email'
+          label={t('login.email')}
           type='email'
           name='email'
-          placeholder='Enter Email'
+          placeholder={t('login.emailPlaceholder')}
           required
           disabled={loading}
           error={fieldErrors.email}
@@ -99,10 +100,10 @@ const LoginForm = () => {
         />
         <InputField
           ref={passwordRef}
-          label='Password'
+          label={t('login.password')}
           type='password'
           name='password'
-          placeholder='Enter Password'
+          placeholder={t('login.passwordPlaceholder')}
           required
           disabled={loading}
           error={fieldErrors.password}
@@ -120,7 +121,7 @@ const LoginForm = () => {
 
       <Button
         type='submit'
-        label={loading ? 'Signing in…' : 'Sign in'}
+        label={loading ? t('login.signingIn') : t('login.signIn')}
         variant='contained'
         size='md'
         fullWidth
@@ -128,13 +129,13 @@ const LoginForm = () => {
       />
 
       <p className='text-center text-sm text-app-text-muted'>
-        Don&apos;t have an account?{' '}
+        {t('login.registerPrompt')}{' '}
         <Link
           data-testid='register-btn'
           to='/register'
           className='font-medium text-app-primary-500 hover:text-app-primary-800'
         >
-          Register
+          {t('login.register')}
         </Link>
       </p>
     </form>

@@ -1,0 +1,43 @@
+{
+  "app": {
+    "name": "Go Manage"
+  },
+  "brand": {
+    "welcome": "Welcome Back",
+    "tagline": "Manage your projects and tasks efficiently"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "tasks": "Tasks",
+    "users": "Users",
+    "settings": "Settings"
+  },
+  "login": {
+    "title": "Login to your Account",
+    "subtitle": "Welcome back! Sign in to continue.",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "registerPrompt": "Don't have an account?",
+    "register": "Register",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…"
+  },
+  "projects": {
+    "title": "Projects",
+    "create": "Create Project",
+    "search": "Search projects",
+    "name": "Project Name",
+    "status": "Status",
+    "delete": "Delete Project",
+    "empty": "No projects found"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "language": "Language"
+  }
+}
