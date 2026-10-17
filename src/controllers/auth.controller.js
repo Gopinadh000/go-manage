@@ -1,14 +1,14 @@
-import { ReS, ReE } from "../utils/Res.utils.js";
-import { db, executeTransaction } from "../db-config/mysql-config.js";
-import { generateUserId, generateTenantId } from "../utils/common.js";
-import bcrypt from "bcryptjs";
+import { ReS, ReE } from '../utils/Res.utils.js';
+import { db, executeTransaction } from '../db-config/mysql-config.js';
+import { generateUserId, generateTenantId } from '../utils/common.js';
+import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 dotenv.config();
 import {
   setAuthCookie,
   clearAuthCookie,
   generateJWTAccesToken,
-} from "../middlewares/jwt/jwtToken.js";
+} from '../middlewares/jwt/jwtToken.js';
 
 const saltRounds = 10;
 
@@ -22,16 +22,16 @@ const buildUserSessionData = async (userRow) => {
     tenant_id,
     role_id,
     email,
-    id
+    id,
   } = userRow;
 
   const [userTenantData] = await db.query(
-    "SELECT * FROM tenants WHERE id = ?",
+    'SELECT * FROM tenants WHERE id = ?',
     [tenant_id],
   );
 
   if (!userTenantData?.length) {
-    throw new Error("Tenant not found for user");
+    throw new Error('Tenant not found for user');
   }
 
   const [userPermissions] = await db.query(
@@ -49,7 +49,7 @@ const buildUserSessionData = async (userRow) => {
   } = userTenantData[0];
 
   return {
-    userId : id,
+    userId: id,
     firstName: first_name,
     lastName: last_name,
     userPublicId: public_id,
@@ -57,7 +57,7 @@ const buildUserSessionData = async (userRow) => {
     email,
     userRoleId: role_id,
     tenantId: tenant_id,
-    tenantPublicId : tenantPublicId,
+    tenantPublicId: tenantPublicId,
     tenantName: tenant_name,
     tenantSlug: tenant_slug,
     userpermissions: userPermissions.map((p) => p.permission_name),
@@ -73,14 +73,14 @@ export const registerUser = async (req, res) => {
 
     if (!firstname || !lastname || !email || !password || !tenant_name) {
       return ReE(res, {
-        error: "All fields are required",
+        error: 'All fields are required',
         status: false,
         statusCode: 400,
-        statusMessage: "All fields are required",
+        statusMessage: 'All fields are required',
       });
     }
 
-    const convertToSlug = (text) => text.trim().replace(/\s+/g, "-");
+    const convertToSlug = (text) => text.trim().replace(/\s+/g, '-');
     const tenantSlugName = convertToSlug(tenant_name);
 
     const [tenantRows] = await db.query(
@@ -92,38 +92,38 @@ export const registerUser = async (req, res) => {
 
     if (tenantRows.length > 0) {
       return ReE(res, {
-        error: "Company already exists. Please use a different company name.",
+        error: 'Company already exists. Please use a different company name.',
         status: false,
         statusCode: 400,
-        statusMessage: "Company already exists",
+        statusMessage: 'Company already exists',
       });
     }
 
     const [existingUsers] = await db.query(
-      "SELECT email, public_id FROM users WHERE email = ?",
+      'SELECT email, public_id FROM users WHERE email = ?',
       [email],
     );
 
     if (existingUsers.length > 0) {
       return ReE(res, {
-        error: "User with this email already exists",
+        error: 'User with this email already exists',
         status: false,
         statusCode: 400,
-        statusMessage: "User with this email already exists",
+        statusMessage: 'User with this email already exists',
       });
     }
 
     const [roleRows] = await db.query(
-      "SELECT id FROM app_roles WHERE name = ? AND is_system_role = TRUE LIMIT 1",
-      ["SUPER_ADMIN"],
+      'SELECT id FROM app_roles WHERE name = ? AND is_system_role = TRUE LIMIT 1',
+      ['SUPER_ADMIN'],
     );
 
     if (roleRows.length === 0) {
       return ReE(res, {
-        error: "Default SUPER_ADMIN role is missing",
+        error: 'Default SUPER_ADMIN role is missing',
         status: false,
         statusCode: 500,
-        statusMessage: "Something Went Wrong",
+        statusMessage: 'Something Went Wrong',
       });
     }
 
@@ -131,7 +131,7 @@ export const registerUser = async (req, res) => {
 
     await executeTransaction(async (db2) => {
       const [tenantResult] = await db2.query(
-        "INSERT INTO tenants (public_id, tenant_name, tenant_slug) VALUES (?, ?, ?)",
+        'INSERT INTO tenants (public_id, tenant_name, tenant_slug) VALUES (?, ?, ?)',
         [tenantPublicId, tenant_name, tenantSlugName],
       );
 
@@ -139,15 +139,29 @@ export const registerUser = async (req, res) => {
       const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
       await db2.query(
-        "INSERT INTO users (public_id, tenant_id, role_id, first_name, last_name, email, password_hash) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [userPublicId, tenantId, superAdminRoleId, firstname, lastname, email, hashedPassword],
+        'INSERT INTO users (public_id, tenant_id, role_id, first_name, last_name, email, password_hash) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [
+          userPublicId,
+          tenantId,
+          superAdminRoleId,
+          firstname,
+          lastname,
+          email,
+          hashedPassword,
+        ],
       );
     });
+
+  //  appEvents.emit("userCreated", {
+  //     userId: newUserId,
+  //     name: name.trim(),
+  //     email: normalizedEmail,
+  //   });
 
     return ReS(res, {
       status: true,
       statusCode: 200,
-      statusMessage: "User registered successfully",
+      statusMessage: 'User registered successfully',
       data: {
         tenant_public_id: tenantPublicId,
         user_public_id: userPublicId,
@@ -161,25 +175,23 @@ export const registerUser = async (req, res) => {
   }
 };
 
-
-
 export const loginUser = async (req, res) => {
   const { email, password } = req.body || {};
 
-  console.log(req.body , "req body")
+  console.log(req.body, 'req body');
 
   try {
     if (!email || !password) {
-      return ReE(res, { message: "Email and password are required" });
+      return ReE(res, { message: 'Email and password are required' });
     }
 
     // 1. Find user by email
-    const [users] = await db.query("SELECT * FROM users WHERE email = ?", [
+    const [users] = await db.query('SELECT * FROM users WHERE email = ?', [
       email,
     ]);
 
     if (users.length === 0) {
-      return ReE(res, { statusMessage: "User Not Found with this email" });
+      return ReE(res, { statusMessage: 'User Not Found with this email' });
     }
 
     const passwordHashed = users[0].password_hash;
@@ -187,19 +199,19 @@ export const loginUser = async (req, res) => {
     // 3. Compare password
     const isMatch = await bcrypt.compare(password, passwordHashed);
     if (!isMatch) {
-      return ReE(res, { statusMessage: "Incorrect Password. Please Check!" });
+      return ReE(res, { statusMessage: 'Incorrect Password. Please Check!' });
     }
 
     const userData = await buildUserSessionData(users[0]);
 
-    console.log(userData , "ud")
+    console.log(userData, 'ud');
 
     const jwtPayload = {
-      userId : userData.userId,
+      userId: userData.userId,
       userRoleId: userData.userRoleId,
       userPublicId: userData.userPublicId,
       tenantId: userData.tenantId,
-      tenantPublicId : userData.tenantPublicId
+      tenantPublicId: userData.tenantPublicId,
     };
 
     const jwtToken = generateJWTAccesToken(jwtPayload);
@@ -208,17 +220,15 @@ export const loginUser = async (req, res) => {
     return ReS(res, {
       status: true,
       statusCode: 200,
-      statusMessage: "User logged in successfully",
+      statusMessage: 'User logged in successfully',
       data: userData,
     });
   } catch (error) {
     return ReE(res, {
-      statusMessage: error?.message || "Login failed",
+      statusMessage: error?.message || 'Login failed',
     });
   }
 };
-
-
 
 /**
  * GET /auth/me
@@ -228,15 +238,14 @@ export const loginUser = async (req, res) => {
  */
 export const getCurrentUser = async (req, res) => {
   try {
-    const [users] = await db.query(
-      "SELECT * FROM users WHERE public_id = ?",
-      [req.userPublicId],
-    );
+    const [users] = await db.query('SELECT * FROM users WHERE public_id = ?', [
+      req.userPublicId,
+    ]);
 
     if (!users.length) {
       clearAuthCookie(res);
       return ReE(res, {
-        statusMessage: "User not found",
+        statusMessage: 'User not found',
         statusCode: 401,
         status: false,
       });
@@ -247,12 +256,12 @@ export const getCurrentUser = async (req, res) => {
     return ReS(res, {
       status: true,
       statusCode: 200,
-      statusMessage: "Authenticated",
+      statusMessage: 'Authenticated',
       data: userData,
     });
   } catch (error) {
     return ReE(res, {
-      statusMessage: error?.message || "Failed to load session",
+      statusMessage: error?.message || 'Failed to load session',
     });
   }
 };
@@ -263,18 +272,17 @@ export const logoutUser = async (req, res) => {
   return ReS(res, {
     status: true,
     statusCode: 200,
-    statusMessage: "Logged out successfully",
+    statusMessage: 'Logged out successfully',
     data: {},
   });
 };
-
 
 export const forgotPassword = async (req, res) => {
   try {
     return ReS(res, {
       status: true,
       statusCode: 200,
-      statusMessage: "Password reset successfully",
+      statusMessage: 'Password reset successfully',
       data: {},
     });
   } catch (error) {
