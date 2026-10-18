@@ -1,83 +1,83 @@
-import dotenv from "dotenv";
-import mysql from "mysql2/promise";
-import { consoleBox } from "../utils/common.js";
+import dotenv from 'dotenv';
+import mysql from 'mysql2/promise';
+import { consoleBox } from '../utils/common.js';
 
-import { DB_CREDIENTAILS_CONFIG } from "./db-data.js";
+import { DB_CREDIENTAILS_CONFIG } from './db-data.js';
 
 dotenv.config();
 
 const getDBConfig = () => {
+  const environment = process.env.APP_ENV || 'DEV';
 
-    const environment = process.env.APP_ENV || "DEV";
+  const config = DB_CREDIENTAILS_CONFIG[environment];
 
-    const config = DB_CREDIENTAILS_CONFIG[environment];
+  if (!config) {
+    throw new Error(
+      `Database configuration not found for environment: ${environment}`,
+    );
+  }
 
-    if (!config) {
-        throw new Error(
-            `Database configuration not found for environment: ${environment}`
-        );
-    }
+  console.log('DB connection settings:', {
+    host: config.HOST,
+    port: config.PORT,
+    user: config.USERNAME,
+    database: config.DATABASE,
+  });
 
-    return {
-        host: config.HOST,
-        port: config.PORT,
-        user: config.USERNAME,
-        password: config.PASSWORD,
-        database: config.DATABASE,
-        ssl: config.ssl
-    };
+  return {
+    host: config.HOST,
+    port: config.PORT,
+    user: config.USERNAME,
+    password: config.PASSWORD,
+    database: config.DATABASE,
+    ssl: config.ssl,
+  };
 };
 
 const dbConfig = getDBConfig();
 
 const db = mysql.createPool({
-    ...dbConfig,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+  ...dbConfig,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 const checkDatabaseConnection = async () => {
-    try {
-        const connection = await db.getConnection();
-        const [rows] = await connection.query(`
+  try {
+    const connection = await db.getConnection();
+    const [rows] = await connection.query(`
             SELECT
                 DATABASE() AS databaseName,
                 VERSION() AS mysqlVersion
         `);
 
-        connection.release();
+    connection.release();
 
-        consoleBox("✅ MySQL connected successfully");
-        consoleBox(`📦 Database: ${rows[0].databaseName} | 🛢️ MySQL Version: ${rows[0].mysqlVersion}`);
+    consoleBox('✅ MySQL connected successfully');
+    consoleBox(
+      `📦 Database: ${rows[0].databaseName} | 🛢️ MySQL Version: ${rows[0].mysqlVersion}`,
+    );
+  } catch (error) {
+    consoleBox('❌ MySQL connection failed', error);
 
-    } catch (error) {
-
-        consoleBox("❌ MySQL connection failed" , error);
-
-        throw error;
-    }
+    throw error;
+  }
 };
 
 const executeTransaction = async (callback) => {
-    const connection = await db.getConnection();
-    try {
-        await connection.beginTransaction();
-        const result = await callback(connection);
-        await connection.commit();
-        return result;
-    } catch (error) {
-        await connection.rollback();
-        throw error;
-    } finally {
-        connection.release();
-    }
+  const connection = await db.getConnection();
+  try {
+    await connection.beginTransaction();
+    const result = await callback(connection);
+    await connection.commit();
+    return result;
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
 };
 
-
-
-export {
-    db,
-    checkDatabaseConnection,
-    executeTransaction
-};
+export { db, checkDatabaseConnection, executeTransaction };

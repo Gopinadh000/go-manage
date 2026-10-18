@@ -1,9 +1,15 @@
 import dotenv from 'dotenv';
 dotenv.config();
+import fs from 'node:fs';
 
 function env(key) {
   return process.env[key];
 }
+
+const rdsSSL = {
+  ca: fs.readFileSync(new URL('../../global-bundle.pem', import.meta.url)),
+  rejectUnauthorized: true,
+};
 
 //Change Only Here For DB CREDENTIALS
 export const DB_CREDIENTAILS_CONFIG = {
@@ -31,6 +37,6 @@ export const DB_CREDIENTAILS_CONFIG = {
     USERNAME: env('APP_DB_USER'),
     PASSWORD: env('APP_DB_PASSWORD'),
     DATABASE: env('APP_DB_NAME'),
-    ssl: false,
+    ssl: rdsSSL,
   },
 };
