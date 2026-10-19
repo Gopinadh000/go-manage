@@ -1,6 +1,11 @@
 import { useCallback, useState } from "react";
 
-const GRAPHQL_BASE_URL = import.meta.env.VITE_GRAPHQL_BASE_URL;
+const isProduction =
+  import.meta.env.VITE_APP_ENV === "PRODUCTION";
+
+const GRAPHQL_BASE_URL = isProduction
+  ? import.meta.env.VITE_PROD_GRAPHQL_BASE_URL
+  : import.meta.env.VITE_DEV_GRAPHQL_BASE_URL;
 
 interface GraphQLResponse<T> {
   data?: T;

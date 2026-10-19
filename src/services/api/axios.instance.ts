@@ -1,7 +1,10 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import { emitLogout } from './authToken'
+const isProduction = import.meta.env.VITE_APP_ENV === 'PRODUCTION'
 
-const baseURL = import.meta.env.VITE_API_BASE_URL ?? ''
+const baseURL = isProduction
+  ? import.meta.env.VITE_PROD_API_BASE_URL
+  : import.meta.env.VITE_DEV_API_BASE_URL
 
 export const apiClient = axios.create({
   baseURL,
