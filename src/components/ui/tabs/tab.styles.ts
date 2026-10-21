@@ -2,12 +2,15 @@ import type { TabsVariant } from "./tabs.types";
 
 export const getTabsContainerClass = (
   variant: TabsVariant,
+  fullWidth = false,
 ) => {
+  const widthClass = fullWidth ? "w-full" : "";
+
   switch (variant) {
     case "segmented":
       return `
         inline-flex
-        w-full
+        ${widthClass || "w-full"}
         items-center
         rounded-lg
         border
@@ -15,27 +18,16 @@ export const getTabsContainerClass = (
         bg-app-surface
         p-0.5
 
-        tablet:w-auto
+        ${fullWidth ? "" : "tablet:w-auto"}
       `;
 
     case "underline":
       return `
         flex
-        w-full
+        ${widthClass || "w-full"}
         items-center
         border-b
         border-app-border
-      `;
-
-    case "fullWidth":
-      return `
-        flex
-        w-full
-        items-stretch
-        rounded-lg
-        border
-        border-app-border
-        bg-app-surface
       `;
 
     default:
@@ -45,10 +37,12 @@ export const getTabsContainerClass = (
 
 export const getTabClass = ({
   variant,
+  fullWidth,
   isActive,
   disabled,
 }: {
   variant: TabsVariant;
+  fullWidth?: boolean;
   isActive: boolean;
   disabled?: boolean;
 }) => {
@@ -73,7 +67,7 @@ export const getTabClass = ({
         transition-colors
         duration-150
 
-        tablet:flex-none
+        ${fullWidth ? "tablet:flex-1" : "tablet:flex-none"}
         tablet:px-4
 
         ${disabledClass}
@@ -98,6 +92,7 @@ export const getTabClass = ({
         outline-none
         transition-colors
         duration-150
+        ${fullWidth ? "flex-1 justify-center" : ""}
 
         ${disabledClass}
 
@@ -112,33 +107,6 @@ export const getTabClass = ({
             ? "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-app-primary-500"
             : ""
         }
-      `;
-
-    case "fullWidth":
-      return `
-        flex
-        flex-1
-        items-center
-        justify-center
-        gap-2
-        px-4
-        py-3
-        text-sm
-        font-medium
-        outline-none
-        transition-colors
-        duration-150
-
-        ${disabledClass}
-
-        ${
-          isActive
-            ? "bg-app-primary-500 text-app-text-inverse"
-            : "bg-app-surface text-app-text hover:bg-app-bg"
-        }
-
-        first:rounded-l-md
-        last:rounded-r-md
       `;
 
     default:

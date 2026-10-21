@@ -1,9 +1,6 @@
 import type { ReactNode } from "react";
 
-export type TabsVariant =
-  | "segmented"
-  | "underline"
-  | "fullWidth";
+export type TabsVariant = "segmented" | "underline";
 
 export interface TabItem {
   id: string;
@@ -17,6 +14,7 @@ export interface TabItem {
 export interface TabsProps {
   tabs: TabItem[];
   variant?: TabsVariant;
+  fullWidth?: boolean;
   urlParam?: string;
   defaultTab?: string;
   onChange?: (tab: TabItem) => void;

@@ -11,6 +11,7 @@ const Tabs = ({
   defaultTab,
   onChange,
   variant = "segmented",
+  fullWidth = false,
 }: TabsProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -40,7 +41,7 @@ const Tabs = ({
   };
 
   return (
-    <div className={getTabsContainerClass(variant)}>
+    <div className={getTabsContainerClass(variant, fullWidth)}>
       {visibleTabs.map((tab) => {
         const isActive = activeTab === tab.key;
 
@@ -52,6 +53,7 @@ const Tabs = ({
             onClick={() => handleTabChange(tab)}
             className={getTabClass({
               variant,
+              fullWidth,
               isActive,
               disabled: tab.disabled,
             })}
