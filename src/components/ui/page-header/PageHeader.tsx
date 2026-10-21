@@ -15,7 +15,7 @@ const PageHeader = ({ title, subtitle, children }: PageHeaderProps) => {
         rounded-md
         px-4
         py-3
-        mb-5
+        mb-3
 
         tablet:flex-row
         tablet:items-center
