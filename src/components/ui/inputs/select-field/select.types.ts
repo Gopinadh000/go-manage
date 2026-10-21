@@ -1,3 +1,5 @@
+import type { SelectChangeEvent } from '@mui/material/Select'
+
 export interface SelectOption {
   label: string | number;
   value: string | number;
@@ -18,6 +20,10 @@ export interface SelectProps {
   label?: string;
   required?: boolean;
   placeholder?: string;
-  onChange : ()=> void;
-
+  value?: string | number;
+  options: SelectOption[];
+  onChange: (event: SelectChangeEvent) => void;
+  error?: string;
+  name: string;
+  disabled?: boolean;
 }

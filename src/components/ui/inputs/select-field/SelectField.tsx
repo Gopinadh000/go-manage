@@ -4,8 +4,8 @@ import {
   FormHelperText,
   MenuItem,
   Select as SelectField,
-  type SelectChangeEvent,
 } from "@mui/material";
+import type { SelectProps } from "./select.types";
 
 
 const Select = ({
@@ -23,7 +23,7 @@ const Select = ({
     <div className="flex flex-col gap-1 w-full">
       {/* Label */}
       {label && (
-        <label className="text-sm font-medium text-app-text">
+        <label htmlFor={name} className="text-sm font-medium text-app-text">
           {label}
 
           {required && <span className="ml-1 text-red-500">*</span>}

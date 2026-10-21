@@ -3,6 +3,7 @@ import AiAssistantPage from "../../pages/app-pages/ai-assistant-page/AiAssistant
 import ChatPage from "../../pages/app-pages/chat-page/ChatPage";
 import DashboardPage from "../../pages/app-pages/dashboard-page/DashboardPage";
 import ProjectsPage from "../../pages/app-pages/projects-page/ProjectsPage";
+import ProjectTasksPage from "../../pages/app-pages/tasks-page/ProjectTasksPage";
 import SettingsPage from "../../pages/app-pages/settings-page/SettingsPage";
 import TasksPage from "../../pages/app-pages/tasks-page/TasksPage";
 import UsersPage from "../../pages/app-pages/users-page/UsersPage";
@@ -31,6 +32,11 @@ const routesList = [
     id: 3,
     path: "/projects",
     element: withPermission("projects:view", <ProjectsPage />),
+  },
+  {
+    id: 11,
+    path: "/projects/:projectId/tasks",
+    element: withPermission("projects:view", <ProjectTasksPage />),
   },
   {
     id: 4,
