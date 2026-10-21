@@ -13,7 +13,6 @@ const PageHeader = ({ title, subtitle, children }: PageHeaderProps) => {
         flex-col
         gap-3
         rounded-md
-        bg-app-surface
         px-4
         py-3
         mb-5
@@ -23,7 +22,7 @@ const PageHeader = ({ title, subtitle, children }: PageHeaderProps) => {
         tablet:justify-between
       ">
       <div className="min-w-0">
-        <h1 className="truncate text-2xl font-semibold text-app-text">{title}</h1>
+        <h1 className="truncate text-2xl font-bold text-app-text">{title}</h1>
         {subtitle && (
           <p className="mt-0.5 text-xs text-app-text-muted">
             {subtitle}
