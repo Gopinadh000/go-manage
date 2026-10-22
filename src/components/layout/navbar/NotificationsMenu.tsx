@@ -140,7 +140,7 @@ const NotificationsMenu = () => {
 
           <div className="h-px bg-app-border" />
 
-          <div className="max-h-80 overflow-y-auto">
+          <div className="custom-scrollbar max-h-80 overflow-y-auto">
             {notifications.length === 0 ? (
               <div className="px-3.5 py-8 text-center text-sm text-app-text-muted">
                 No notifications yet

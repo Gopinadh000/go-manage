@@ -47,7 +47,7 @@ const ProjectMembersPanel = ({
           <h2 className="text-lg font-semibold text-app-text">Project members</h2>
           <p className="mt-1 text-xs text-app-text-muted">Choose members and set one project owner.</p>
         </header>
-        <div className="min-h-0 flex-1 overflow-y-auto p-3">
+        <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto p-3">
           {members.length === 0 && (
             <p className="p-5 text-center text-sm text-app-text-muted">Members will appear here when connected to the user API.</p>
           )}

@@ -53,6 +53,7 @@ const UserCards = () => {
     <div
       className="
         h-full
+        custom-scrollbar
         overflow-y-auto
         overflow-x-hidden
         bg-app-bg

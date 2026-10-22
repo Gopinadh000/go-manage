@@ -130,7 +130,7 @@ const APPModal: React.FC<ModalProps> = ({
           </Box>
 
           {/* Body */}
-          <Box className="flex-grow overflow-y-auto bg-app-surface p-4 text-app-text">
+          <Box className="custom-scrollbar flex-grow overflow-y-auto bg-app-surface p-4 text-app-text">
             {children}
           </Box>
 

@@ -92,7 +92,7 @@ const DataTable = ({
 
   return (
     <div className="h-full min-h-0 flex flex-col bg-app-surface p-3 rounded-md custom-scrollbar">
-      <div className="flex-1 min-h-0 overflow-auto border rounded-t-sm border-app-border overflow-x-auto">
+      <div className="custom-scrollbar flex-1 min-h-0 overflow-auto border rounded-t-sm border-app-border overflow-x-auto">
         <table className="w-full border-collapse">
           <thead className="sticky top-0 z-10 bg-app-surface  shadow-sm">
             <tr className="h-12 border-b border-app-border">

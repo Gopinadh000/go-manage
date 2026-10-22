@@ -48,7 +48,7 @@ const SettingsPage = () => {
           aria-label="Settings sections"
           role="tablist"
           aria-orientation="vertical"
-          className="flex min-h-0 gap-1 overflow-x-auto rounded-lg border border-app-border bg-app-surface p-2 tablet:h-full tablet:flex-col tablet:gap-1 tablet:overflow-y-auto"
+          className="custom-scrollbar flex min-h-0 gap-1 overflow-x-auto rounded-lg border border-app-border bg-app-surface p-2 tablet:h-full tablet:flex-col tablet:gap-1 tablet:overflow-y-auto"
         >
           {settingsTabs.map((tab) => {
             const isActive = activeTab === tab.id
@@ -104,7 +104,7 @@ const SettingsPage = () => {
           id={`settings-panel-${activeTab}`}
           role="tabpanel"
           aria-labelledby={`settings-tab-${activeTab}`}
-          className="min-h-0 min-w-0 overflow-y-auto rounded-lg border border-app-border bg-app-surface p-4 tablet:h-full tablet:p-6"
+          className="custom-scrollbar min-h-0 min-w-0 overflow-y-auto rounded-lg border border-app-border bg-app-surface p-4 tablet:h-full tablet:p-6"
         >
           {tabContent[activeTab]}
         </section>

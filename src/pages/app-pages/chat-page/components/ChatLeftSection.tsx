@@ -76,7 +76,7 @@ const ChatLeftSection = memo(({
         />
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto">
         {visibleConversations.length > 0 ? (
           visibleConversations.map((conversation) => (
             <ChatUserCard

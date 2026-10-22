@@ -49,7 +49,7 @@ const ProjectStatusesPanel = ({ open, statuses, onClose, onSave }: ProjectStatus
           <h2 className="text-lg font-semibold text-app-text">Configure statuses</h2>
           <p className="mt-1 text-xs text-app-text-muted">Status names are project-specific; categories are shared.</p>
         </header>
-        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-4">
+        <div className="custom-scrollbar min-h-0 flex-1 space-y-2 overflow-y-auto p-4">
           {draft.length === 0 && (
             <p className="rounded-lg border border-dashed border-app-border p-4 text-center text-sm text-app-text-muted">
               No project statuses are configured yet.
