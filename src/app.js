@@ -19,10 +19,12 @@ app.use(
     credentials: true,
     // methods : "GET , POST, PUT, DELETE, PATCH",
     // allowedHeaders : 'Content-Type , Accepts , Authorization'
-  }),
+  })
 );
 
 app.use('/api/v1', v1Routes);
+
+//Graph QL Server setup with express middleware and context
 app.use(
   '/graphql',
   cookieTokenAuth,
@@ -39,7 +41,7 @@ app.use(
         userId,
       };
     },
-  }),
+  })
 );
 
 export default app;

@@ -798,3 +798,139 @@ ALTER TABLE projects
         ADD COLUMN project_key VARCHAR(5) NULL
         AFTER project_name;
 
+-- Migration 023: standardize-system-role-names
+UPDATE app_roles
+            SET name = CASE
+                WHEN UPPER(name) = 'SUPER ADMIN' THEN 'SUPER_ADMIN'
+                WHEN UPPER(name) = 'MANAGER' THEN 'MEMBER'
+                WHEN UPPER(name) = 'MEMBER' THEN 'MEMBER'
+                WHEN UPPER(name) = 'USER' THEN 'USER'
+                ELSE name
+            END,
+            description = CASE
+                WHEN UPPER(name) = 'SUPER ADMIN'
+                    THEN 'Full access to all application features'
+                WHEN UPPER(name) IN ('MANAGER', 'MEMBER')
+                    THEN 'Can manage projects and tasks'
+                WHEN UPPER(name) = 'USER'
+                    THEN 'Can work on assigned projects and tasks'
+                ELSE description
+            END,
+            is_system_role = TRUE
+            WHERE tenant_id IS NULL
+              AND UPPER(name) IN ('SUPER ADMIN', 'SUPER_ADMIN', 'MANAGER', 'MEMBER', 'USER');
+
+-- Migration 024: seed-all-app-permissions
+INSERT IGNORE INTO app_permissions
+                (permission_name, description)
+            VALUES
+                ('dashboard:view', 'View dashboard'),
+                ('projects:view', 'View projects'),
+                ('projects:create', 'Create projects'),
+                ('projects:update', 'Edit projects'),
+                ('projects:delete', 'Delete projects'),
+                ('projects:export', 'Export projects'),
+                ('projects:members:view', 'View project members'),
+                ('projects:members:add', 'Add project members'),
+                ('projects:members:remove', 'Remove project members'),
+                ('tasks:view', 'View tasks'),
+                ('tasks:create', 'Create tasks'),
+                ('tasks:update', 'Edit tasks'),
+                ('tasks:delete', 'Delete tasks'),
+                ('tasks:export', 'Export tasks'),
+                ('tasks:comments:view', 'View task comments'),
+                ('tasks:comments:create', 'Create task comments'),
+                ('tasks:comments:update', 'Update task comments'),
+                ('tasks:comments:delete', 'Delete task comments'),
+                ('tasks:history:view', 'View task history'),
+                ('users:view', 'View users'),
+                ('users:create', 'Create users'),
+                ('users:update', 'Edit users'),
+                ('users:delete', 'Delete users'),
+                ('ai:view', 'Access AI assistant'),
+                ('chat:view', 'Access chat'),
+                ('chat:send', 'Send chat messages'),
+                ('settings:view', 'View settings'),
+                ('settings:update', 'Update settings'),
+                ('roles:view', 'View roles'),
+                ('roles:create', 'Create roles'),
+                ('roles:update', 'Edit roles'),
+                ('roles:delete', 'Delete roles'),
+                ('permissions:view', 'View permissions'),
+                ('permissions:assign', 'Assign permissions to roles');
+
+-- Migration 025: assign-all-permissions-to-super-admin
+INSERT IGNORE INTO role_permissions (role_id, permission_id)
+            SELECT r.id, p.id
+            FROM app_roles r
+            CROSS JOIN app_permissions p
+            WHERE r.tenant_id IS NULL
+              AND r.name = 'SUPER_ADMIN';
+
+-- Migration 026: assign-member-permissions
+INSERT IGNORE INTO role_permissions (role_id, permission_id)
+            SELECT r.id, p.id
+            FROM app_roles r
+            CROSS JOIN app_permissions p
+            WHERE r.tenant_id IS NULL
+              AND r.name = 'MEMBER'
+              AND p.permission_name IN (
+                  'dashboard:view',
+                  'projects:view',
+                  'projects:create',
+                  'projects:update',
+                  'projects:delete',
+                  'projects:export',
+                  'projects:members:view',
+                  'projects:members:add',
+                  'projects:members:remove',
+                  'tasks:view',
+                  'tasks:create',
+                  'tasks:update',
+                  'tasks:delete',
+                  'tasks:export',
+                  'tasks:comments:view',
+                  'tasks:comments:create',
+                  'tasks:comments:update',
+                  'tasks:comments:delete',
+                  'tasks:history:view',
+                  'users:view',
+                  'ai:view',
+                  'chat:view',
+                  'chat:send',
+                  'settings:view'
+              );
+
+-- Migration 027: assign-user-permissions
+INSERT IGNORE INTO role_permissions (role_id, permission_id)
+            SELECT r.id, p.id
+            FROM app_roles r
+            CROSS JOIN app_permissions p
+            WHERE r.tenant_id IS NULL
+              AND r.name = 'USER'
+              AND p.permission_name IN (
+                  'dashboard:view',
+                  'projects:view',
+                  'tasks:view',
+                  'tasks:create',
+                  'tasks:update',
+                  'tasks:comments:view',
+                  'tasks:comments:create',
+                  'tasks:history:view',
+                  'ai:view',
+                  'chat:view',
+                  'chat:send',
+                  'settings:view'
+              );
+
+-- Migration 028: verify-system-role-permission-counts
+SELECT
+                r.id AS role_id,
+                r.name AS role_name,
+                COUNT(rp.permission_id) AS permission_count
+            FROM app_roles r
+            LEFT JOIN role_permissions rp ON rp.role_id = r.id
+            WHERE r.tenant_id IS NULL
+              AND r.name IN ('SUPER_ADMIN', 'MEMBER', 'USER')
+            GROUP BY r.id, r.name;
+
