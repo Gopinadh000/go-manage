@@ -1,5 +1,3 @@
-
-
 const projectSchema = `#graphql
 
 
@@ -56,6 +54,7 @@ const projectSchema = `#graphql
    type Query {
       projectOptions: [ProjectOption!]!
       projectCards: [ProjectCard!]!
+      projectById(id: ID!): ProjectCard!
    }
 
 

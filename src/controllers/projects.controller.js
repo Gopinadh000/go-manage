@@ -71,7 +71,13 @@ export const projectsDataTable = async (req, res) => {
          p.end_date as endDate ,
          p.created_at,
          p.created_by ,
-         JSON_OBJECT( 'id' , u.id,  'value' , u.id , 'label' , u.first_name ) AS  projectOwner
+         JSON_OBJECT( 'id' , u.id,  'value' , u.id , 'label' , u.first_name ) AS  projectOwner,
+         (
+           SELECT COUNT(*)
+           FROM tasks t
+           WHERE t.project_id = p.id
+             AND t.tenant_id = p.tenant_id
+         ) AS tasks_count
          FROM projects p
          LEFT JOIN users u ON u.id = p.owner_id
          WHERE p.tenant_id = ? 
