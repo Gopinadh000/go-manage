@@ -3,7 +3,6 @@ export const CREATE_PROJECT_MUTATION = `
     mutation CreateProject(
         $input: CreateProjectInput!
     ) {
-
         createProject(input: $input) {
           status
         statusMessage
@@ -24,8 +23,19 @@ export const CREATE_PROJECT_MUTATION = `
 
 
 export const UPDATE_PROJECT_MUTATION = `
-
-
+  mutation UpdateProject($id: ID!, $input: UpdateProjectInput!) {
+    updateProject(id: $id, input: $input) {
+      id
+      name
+      description
+      status
+      owner {
+        id
+        firstName
+        lastName
+      }
+    }
+  }
 `;
 
 export const DELETE_PROJECT_MUTATION = `

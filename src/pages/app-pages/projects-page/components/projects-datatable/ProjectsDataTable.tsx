@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import DataTable from "../../../../../components/ui/data-table/DataTable";
 import { EditOutlined } from "@mui/icons-material";
 import { DeleteOutlineOutlined } from "@mui/icons-material";
 import { useGraphQL } from "../../../../../services/api/useGrapghQL";
 import { DELETE_PROJECT_MUTATION } from "../../../../../graphql/mutations/project.mutations";
 import { Link } from "react-router-dom";
+import UpdateProjectModal from "../update-project/UpdateProjectModal";
 
 type ProjectRow = Record<string, unknown>;
 
@@ -36,9 +37,16 @@ const ProjectTaskLink = ({ value, row }: { value: unknown; row: ProjectRow }) =>
 
 const ProjectsDataTable = ({ refreshKey, reloadTable }) => {
   const { execute } = useGraphQL();
+  const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
 
-   const handleEdit = (row: ProjectRow) => {
-    console.log("Edit user:", row);
+  const handleEdit = (row: ProjectRow) => {
+    const projectId = getText(row, "projectPublicId", "projectpublicid");
+    if (!projectId) {
+      console.error("Cannot edit project: project public ID is missing.");
+      return;
+    }
+
+    setEditingProjectId(projectId);
   };
 
   const handleDelete =  async (row: ProjectRow) => {
@@ -58,7 +66,7 @@ const ProjectsDataTable = ({ refreshKey, reloadTable }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-app-bg ">
+    <div className="flex h-full flex-col bg-app-bg">
       <DataTable
         tableUrlConfig={{ pageName: "/projects" }}
         rowKey="projectid"
@@ -87,13 +95,12 @@ const ProjectsDataTable = ({ refreshKey, reloadTable }) => {
           },
           {
             fieldName : "action",
-            cell : (value: unknown, row: ProjectRow) => {
-              void value;
+            cell : (_value: unknown, row: ProjectRow) => {
               return (
                 <div className="flex items-center gap-1 group-hover:opacity-100 ">
                                <button
                                  type="button"
-                                 title="Edit user"
+                                 title="Edit project"
                                  onClick={() => handleEdit(row)}
                                  className="
                                    flex
@@ -115,7 +122,7 @@ const ProjectsDataTable = ({ refreshKey, reloadTable }) => {
                                {/* Delete */}
                                <button
                                  type="button"
-                                 title="Delete user"
+                                 title="Delete project"
                                  onClick={() => handleDelete(row)}
                                  className="
                                    flex
@@ -140,6 +147,12 @@ const ProjectsDataTable = ({ refreshKey, reloadTable }) => {
             }
           }
         ]}
+      />
+      <UpdateProjectModal
+        open={editingProjectId !== null}
+        projectId={editingProjectId}
+        onClose={() => setEditingProjectId(null)}
+        refreshTable={reloadTable}
       />
     </div>
   );
