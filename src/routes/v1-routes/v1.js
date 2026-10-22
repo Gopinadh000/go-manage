@@ -1,29 +1,27 @@
-import projectsRoutes from "./projects.routes.js"
-import express from "express"
-import { ReS } from "../../utils/Res.utils.js";
-import authRoutes from "./auth.routes.js";
-import usersRoutes from "./users.routes.js"
-import {cookieTokenAuth } from ".././../middlewares/jwt/jwtToken.js"
+import projectsRoutes from './projects.routes.js';
+import express from 'express';
+import { ReS } from '../../utils/Res.utils.js';
+import authRoutes from './auth.routes.js';
+import usersRoutes from './users.routes.js';
+import { cookieTokenAuth } from '.././../middlewares/jwt/jwtToken.js';
+import tasksRoutes from './tasks.routes.js';
 
-
-const router = express.Router()
-
+const router = express.Router();
 
 //test route
-router.get("/test",  cookieTokenAuth ,(req,res)=> {
+router.get('/test', cookieTokenAuth, (req, res) => {
+  ReS(res, {
+    status: true,
+    statusCode: 200,
+    statusMessage: 'Test Api is working',
+  });
+});
 
-    ReS(res, {
-        status: true,
-        statusCode: 200,
-        statusMessage: "Test Api is working",
-    })
-})
+//app routes
+router.use('/auth', authRoutes);
+router.use('/projects', cookieTokenAuth, projectsRoutes);
 
-//app routes 
-router.use("/auth", authRoutes);
-router.use("/projects",  cookieTokenAuth ,  projectsRoutes);
+router.use('/users', cookieTokenAuth, usersRoutes);
+router.use('/tasks', cookieTokenAuth, tasksRoutes);
 
-router.use("/users" , cookieTokenAuth,  usersRoutes )
-
-
-export { router  }  
+export { router };
