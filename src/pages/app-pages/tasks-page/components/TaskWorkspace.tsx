@@ -48,7 +48,8 @@ const TaskWorkspace = ({
       </PageHeader>
 
       <div className="min-h-0 flex-1">
-        {view === 'list' ? <TaskList mode={mode} projectId={projectId} /> : <TaskBoard />}
+        {view === 'list' ?
+         <TaskList mode={mode} projectId={projectId} /> : <TaskBoard />}
       </div>
     </div>
   )

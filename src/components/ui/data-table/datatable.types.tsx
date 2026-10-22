@@ -14,17 +14,18 @@ export interface DataTablePagination {
 
 export interface TableUrlConfigProps {
     pageName : string;
+    payloadParams?: string;
 }
 
 export interface CustomCell {
   fieldName: string;
-  cell: ( value: any, row: any) => React.ReactNode;
+  cell: (value: unknown, row: Record<string, unknown>) => React.ReactNode;
 }
 
 
 export interface DataTableProps {
     headers? : DataTableHeader ;
-    items? : Record<string ,any>[];
+    items? : Record<string, unknown>[];
     rowKey : string;
     pagination? :DataTablePagination;
     onPageChange? : (page : number)=> void;

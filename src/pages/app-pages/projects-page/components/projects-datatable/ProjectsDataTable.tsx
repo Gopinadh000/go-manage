@@ -20,7 +20,7 @@ const getText = (row: ProjectRow, ...keys: string[]) => {
 };
 
 const ProjectTaskLink = ({ value, row }: { value: unknown; row: ProjectRow }) => {
-  const projectId = getText(row, "projectPublicId", "projectpublicid", "projectid", "id");
+  const projectId = getText(row, "projectid", "id");
   const projectName = getText(row, "projectName", "projectname", "name") || String(value ?? "Project");
   const projectDescription = getText(row, "description", "projectDescription", "projectdescription");
 

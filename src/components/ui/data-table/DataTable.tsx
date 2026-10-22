@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import type { DataTableProps } from "./datatable.types.tsx";
 import TablePagination from "./components/TablePagination.tsx";
 import { useApi } from "../../../services/api/useApi.ts";
@@ -30,7 +30,7 @@ const DataTable = ({
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
 
-  const fetchTableData = async (page: number) => {
+  const fetchTableData = useCallback(async (page: number) => {
     try {
       const params = new URLSearchParams(payloadParams || "");
 
@@ -47,17 +47,20 @@ const DataTable = ({
       }
 
       const responseData = resData.data;
-      setTableData(responseData);
+      setTableData({
+        ...responseData,
+        headers: responseData.headers ?? [],
+      });
       setSelectedRows([]);
     } catch (error) {
       console.error("Failed to fetch table data:", error);
     }
-  };
+  }, [baseUrl, GET, pagination.pageSize, payloadParams]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTableData(pagination.page);
-  }, [refreshKey, pagination.page ]);
+  }, [fetchTableData, pagination.page, refreshKey]);
 
 
 
@@ -151,9 +154,12 @@ const DataTable = ({
                 </tr>
               ))
             ) : (
-              <tr className="group border-b border-app-border hover:bg-app-bg ">
-                <td className="flex ">
-                  <span>No Data To Display</span>
+              <tr>
+                <td
+                  colSpan={Math.max(headers.length, 1)}
+                  className="px-4 py-10 text-center align-middle text-sm text-app-text-muted"
+                >
+                  No Data to Display
                 </td>
               </tr>
             )}
